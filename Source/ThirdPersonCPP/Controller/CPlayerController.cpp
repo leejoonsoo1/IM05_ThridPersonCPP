@@ -28,11 +28,7 @@ void ACPlayerController::ToggleOptionMenu()
 
 	CheckNull(OptionMenu);
 	OptionMenu->AddToViewport(100);
-	
-	//FInputModeUIOnly InputMode;
-	//InputMode.SetWidgetToFocus(OptionMenu->TakeWidget());
-	//SetInputMode(InputMode);
-	
+
 	bShowMouseCursor = true;	
 	SetInputMode(FInputModeGameAndUI());
 }
