@@ -28,6 +28,7 @@ private:
 	void OnMoveRight(float Axis);
 	void OnTurn(float Axis);
 	void OnLookUp(float Axis);
+	void OnZoom(float Axis);
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
