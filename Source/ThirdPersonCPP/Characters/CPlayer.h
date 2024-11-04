@@ -8,6 +8,8 @@ class USpringArmComponent;
 class UCameraComponent;
 class UCAttributeComponent;
 class UCOptionComponent;
+class UCStateComponent;
+class UCMontagesComponent;
 
 UCLASS()
 class THIRDPERSONCPP_API ACPlayer : public ACharacter
@@ -42,4 +44,10 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UCOptionComponent* OptionComp;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCStateComponent* StateComp;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCMontagesComponent* MontagesComp;
 };
