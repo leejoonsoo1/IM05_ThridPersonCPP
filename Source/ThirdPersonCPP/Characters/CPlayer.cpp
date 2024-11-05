@@ -5,8 +5,8 @@
 #include "Camera\CameraComponent.h"
 #include "Components/CAttributeComponent.h"
 #include "Components/COptionComponent.h"
-#include "Components/CStateComponent.h"
 #include "Components/CMontagesComponent.h"
+#include "Components/CActionComponent.h"
 
 ACPlayer::ACPlayer()
 {
@@ -40,8 +40,11 @@ ACPlayer::ACPlayer()
 	// State Comp
 	CHelpers::CreateActorComponent(this, &StateComp, "StateComp");
 
-	// MOntages Comp;
+	// Montages Comp
 	CHelpers::CreateActorComponent(this, &MontagesComp, "MontagesComp");
+
+	// Action Comp
+	CHelpers::CreateActorComponent(this, &ActionComp, "ActionComp");
 
 	// MovementComp
 	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetSprintSpeed();
@@ -53,6 +56,8 @@ ACPlayer::ACPlayer()
 void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	StateComp->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 }
 
 void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -65,6 +70,10 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("LookUp", this, &ACPlayer::OnLookUp);
 	PlayerInputComponent->BindAxis("Zoom", this, &ACPlayer::OnZoom);
 
+	PlayerInputComponent->BindAction("Evade", IE_Pressed, this, &ACPlayer::OnEvade);
+	
+	PlayerInputComponent->BindAction("Evade", IE_Pressed, this, &ACPlayer::OnWalk);
+	PlayerInputComponent->BindAction("Evade", IE_Released, this, &ACPlayer::OffWalk);
 }
 
 void ACPlayer::OnMoveForward(float Axis)
@@ -107,4 +116,102 @@ void ACPlayer::OnZoom(float Axis)
 
 	SpringArmComp->TargetArmLength	+=	Rate;
 	SpringArmComp->TargetArmLength	=	FMath::Clamp(SpringArmComp->TargetArmLength, OptionComp->GetZoomMin(), OptionComp->GetZoomMax());
+}
+
+void ACPlayer::OnEvade()
+{
+	CheckFalse(StateComp->IsIdleMode());
+	CheckFalse(AttributeComp->IsCanMove());
+
+	// Only C++ Function.
+	if (InputComponent->GetAxisValue("MoveForward") < 0)
+	{
+		StateComp->SetBackstepMode();
+
+		return;
+	}
+
+	StateComp->SetRollMode();
+}
+
+void ACPlayer::OnWalk()
+{
+	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetWalkSpeed();
+}
+
+void ACPlayer::OffWalk()
+{
+	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetSprintSpeed();
+}
+
+void ACPlayer::Begin_Roll()
+{
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	RollingRotation();
+
+	MontagesComp->PlayRoll();
+}
+
+void ACPlayer::Begin_Backstep()
+{
+	bUseControllerRotationYaw = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	MontagesComp->PlayBackstep();
+}
+
+void ACPlayer::RollingRotation()
+{
+	FVector Start, Target;
+	FRotator Rotation;
+
+	Start = GetActorLocation();
+
+	if (GetVelocity().IsNearlyZero())
+	{
+		const FRotator& ControlRotation = FRotator(0, GetControlRotation().Yaw, 0);
+		const FVector& ControlForward = FQuat(ControlRotation).GetForwardVector();
+
+		Target = Start + ControlForward;;
+	}
+	else
+	{
+		Target = Start + GetVelocity().GetSafeNormal2D();
+	}
+
+	Rotation = UKismetMathLibrary::FindLookAtRotation(Start, Target);
+	SetActorRotation(Rotation);
+}
+
+void ACPlayer::End_Roll()
+{
+	StateComp->SetIdleMode();
+}
+
+void ACPlayer::End_Backstep()
+{
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	StateComp->SetIdleMode();
+}
+
+void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
+{
+	switch (InNewType)
+	{
+		case EStateType::Roll:
+		{
+			Begin_Roll();
+		}
+		break;
+
+		case EStateType::Backstep:
+		{
+			Begin_Backstep();
+		}
+		break;
+	}
 }
