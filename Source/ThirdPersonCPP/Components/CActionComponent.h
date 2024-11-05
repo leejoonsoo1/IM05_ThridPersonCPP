@@ -2,23 +2,23 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "CAtionComponent.generated.h"
+#include "CActionComponent.generated.h"
 
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Unaremd, Fist, OneHand, TwoHand, MagicBall, Wrap, WhirlWind
+	Unaremd, Fist, OneHand, TwoHand, MagicBall, Warp, WhirlWind
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class THIRDPERSONCPP_API UCAtionComponent : public UActorComponent
+class THIRDPERSONCPP_API UCActionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	UCAtionComponent();
+	UCActionComponent();
 
 protected:
 	virtual void BeginPlay() override;
@@ -40,7 +40,7 @@ public:
 	FORCEINLINE bool IsMagicBallMode() const { return Type == EActionType::MagicBall; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsWrapMode() const { return Type == EActionType::Wrap; }
+	FORCEINLINE bool IsWarpMode() const { return Type == EActionType::Warp; }
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsWhirlWindMode() const { return Type == EActionType::WhirlWind; }
@@ -50,7 +50,7 @@ public:
 	void SetOneHandMode();
 	void SetTwoHandMode();
 	void SetMagicBallMode();
-	void SetWrapMode();
+	void SetWarpMode();
 	void SetWhirlWindMode();
 
 private:
@@ -63,5 +63,4 @@ public:
 
 private:
 	EActionType Type;
-		
 };
