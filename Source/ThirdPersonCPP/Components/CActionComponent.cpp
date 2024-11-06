@@ -8,8 +8,6 @@ UCActionComponent::UCActionComponent()
 void UCActionComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 }
 
 void UCActionComponent::SetUnarmedMode()
@@ -55,6 +53,8 @@ void UCActionComponent::SetMode(EActionType InNewType)
 
 		return;
 	}
+
+	ChangeType(InNewType);
 }
 
 void UCActionComponent::ChangeType(EActionType InNewType)

@@ -38,6 +38,13 @@ private:
 	void OnWalk();
 	void OffWalk();
 
+	void OnFist();
+	void OnOneHand();
+	void OnTwoHand();
+	void OnMagicBall();
+	void OnWarp();
+	void OnWhirlWind();
+
 private:
 	void Begin_Roll();
 	void Begin_Backstep();

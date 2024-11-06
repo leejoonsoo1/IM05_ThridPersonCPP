@@ -15,4 +15,14 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UCAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
+
+	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(TryGetPawnOwner());
+	CheckNull(ActionComp);
+
+	ActionComp->OnActionTypeChanged.AddDynamic(this, &UCAnimInstance::OnActionTypeChanged);
+}
+
+void UCAnimInstance::OnActionTypeChanged(EActionType InPrevType, EActionType InNewType)
+{
+	ActionType = InNewType;
 }

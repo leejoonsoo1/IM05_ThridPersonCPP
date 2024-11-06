@@ -4,10 +4,12 @@
 #include "Components/ActorComponent.h"
 #include "CActionComponent.generated.h"
 
+class UCActionData;
+
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Unaremd, Fist, OneHand, TwoHand, MagicBall, Warp, WhirlWind
+	Unaremd, Fist, OneHand, TwoHand, MagicBall, Warp, WhirlWind, Max
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
@@ -25,25 +27,25 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsUnarmedMode() const { return Type == EActionType::Unaremd; }
+	FORCEINLINE bool IsUnarmedMode()	const { return Type == EActionType::Unaremd; }
 	
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsFistMode() const { return Type == EActionType::Fist; }
+	FORCEINLINE bool IsFistMode()		const { return Type == EActionType::Fist; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsOneHandMode() const { return Type == EActionType::OneHand; }
+	FORCEINLINE bool IsOneHandMode()	const { return Type == EActionType::OneHand; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsTwoHandMode() const { return Type == EActionType::TwoHand; }
+	FORCEINLINE bool IsTwoHandMode()	const { return Type == EActionType::TwoHand; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsMagicBallMode() const { return Type == EActionType::MagicBall; }
+	FORCEINLINE bool IsMagicBallMode()	const { return Type == EActionType::MagicBall; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsWarpMode() const { return Type == EActionType::Warp; }
+	FORCEINLINE bool IsWarpMode()		const { return Type == EActionType::Warp; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsWhirlWindMode() const { return Type == EActionType::WhirlWind; }
+	FORCEINLINE bool IsWhirlWindMode()	const { return Type == EActionType::WhirlWind; }
 
 	void SetUnarmedMode();
 	void SetFistMode();
@@ -60,6 +62,10 @@ private:
 public:
 	UPROPERTY(BlueprintAssignable)
 	FActionTypeChanged OnActionTypeChanged;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "DataAsset")
+	UCActionData* DataAsstes[EActionType::Max];
 
 private:
 	EActionType Type;

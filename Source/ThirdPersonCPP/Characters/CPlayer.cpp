@@ -64,16 +64,23 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &ACPlayer::OnMoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ACPlayer::OnMoveRight);
-	PlayerInputComponent->BindAxis("Turn", this, &ACPlayer::OnTurn);
-	PlayerInputComponent->BindAxis("LookUp", this, &ACPlayer::OnLookUp);
-	PlayerInputComponent->BindAxis("Zoom", this, &ACPlayer::OnZoom);
+	PlayerInputComponent->BindAxis("MoveForward",	this, &ACPlayer::OnMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight",		this, &ACPlayer::OnMoveRight);
+	PlayerInputComponent->BindAxis("Turn",			this, &ACPlayer::OnTurn);
+	PlayerInputComponent->BindAxis("LookUp",		this, &ACPlayer::OnLookUp);
+	PlayerInputComponent->BindAxis("Zoom",			this, &ACPlayer::OnZoom);
 
-	PlayerInputComponent->BindAction("Evade", IE_Pressed, this, &ACPlayer::OnEvade);
+	PlayerInputComponent->BindAction("Evade",		IE_Pressed, this, &ACPlayer::OnEvade);
 	
-	PlayerInputComponent->BindAction("Evade", IE_Pressed, this, &ACPlayer::OnWalk);
-	PlayerInputComponent->BindAction("Evade", IE_Released, this, &ACPlayer::OffWalk);
+	PlayerInputComponent->BindAction("Evade",		IE_Pressed,		this, &ACPlayer::OnWalk);
+	PlayerInputComponent->BindAction("Evade",		IE_Released,	this, &ACPlayer::OffWalk);
+
+	PlayerInputComponent->BindAction("Fist",		IE_Pressed,		this, &ACPlayer::OnFist);
+	PlayerInputComponent->BindAction("OneHand",		IE_Released,	this, &ACPlayer::OnOneHand);
+	PlayerInputComponent->BindAction("TwoHand",		IE_Pressed,		this, &ACPlayer::OnTwoHand);
+	PlayerInputComponent->BindAction("MagicBall",	IE_Released,	this, &ACPlayer::OnMagicBall);
+	PlayerInputComponent->BindAction("Warp",		IE_Pressed,		this, &ACPlayer::OnWarp);
+	PlayerInputComponent->BindAction("WhirlWind",	IE_Released,	this, &ACPlayer::OnWhirlWind);
 }
 
 void ACPlayer::OnMoveForward(float Axis)
@@ -91,7 +98,7 @@ void ACPlayer::OnMoveRight(float Axis)
 	CheckFalse(AttributeComp->IsCanMove());
 
 	FRotator ControlRot = FRotator(0, GetControlRotation().Yaw, 0);
-	FVector Direction = FQuat(ControlRot).GetRightVector();
+	FVector Direction	= FQuat(ControlRot).GetRightVector();
 
 	AddMovementInput(Direction, Axis);
 }
@@ -144,6 +151,48 @@ void ACPlayer::OffWalk()
 	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetSprintSpeed();
 }
 
+void ACPlayer::OnFist()
+{
+	CheckFalse(StateComp->IsIdleMode());
+
+	ActionComp->SetFistMode();
+}
+
+void ACPlayer::OnOneHand()
+{
+	CheckFalse(StateComp->IsIdleMode());
+
+	ActionComp->SetOneHandMode();
+}
+
+void ACPlayer::OnTwoHand()
+{
+	CheckFalse(StateComp->IsIdleMode());
+
+	ActionComp->SetTwoHandMode();
+}
+
+void ACPlayer::OnMagicBall()
+{
+	CheckFalse(StateComp->IsIdleMode());
+
+	ActionComp->SetMagicBallMode();
+}
+
+void ACPlayer::OnWarp()
+{
+	CheckFalse(StateComp->IsIdleMode());
+
+	ActionComp->SetWarpMode();
+}
+
+void ACPlayer::OnWhirlWind()
+{
+	CheckFalse(StateComp->IsIdleMode());
+	
+	ActionComp->SetWhirlWindMode();
+}
+
 void ACPlayer::Begin_Roll()
 {
 	bUseControllerRotationYaw = false;
@@ -172,7 +221,7 @@ void ACPlayer::RollingRotation()
 	if (GetVelocity().IsNearlyZero())
 	{
 		const FRotator& ControlRotation = FRotator(0, GetControlRotation().Yaw, 0);
-		const FVector& ControlForward = FQuat(ControlRotation).GetForwardVector();
+		const FVector& ControlForward	= FQuat(ControlRotation).GetForwardVector();
 
 		Target = Start + ControlForward;;
 	}
