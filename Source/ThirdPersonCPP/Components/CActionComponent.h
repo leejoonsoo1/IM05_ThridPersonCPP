@@ -9,7 +9,7 @@ class UCActionData;
 UENUM(BlueprintType)
 enum class EActionType : uint8
 {
-	Unaremd, Fist, OneHand, TwoHand, MagicBall, Warp, WhirlWind, Max
+	Unarmed, Fist, OneHand, TwoHand, MagicBall, Warp, WhirlWind, Max
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FActionTypeChanged, EActionType, InPrevType, EActionType, InNewType);
@@ -27,7 +27,7 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsUnarmedMode()	const { return Type == EActionType::Unaremd; }
+	FORCEINLINE bool IsUnarmedMode()	const { return Type == EActionType::Unarmed; }
 	
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsFistMode()		const { return Type == EActionType::Fist; }
@@ -65,7 +65,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DataAsset")
-	UCActionData* DataAsstes[EActionType::Max];
+	UCActionData* DataAssets[EActionType::Max];
 
 private:
 	EActionType Type;

@@ -6,6 +6,7 @@
 
 class UAnimMontage;
 class ACEquipment;
+class ACharaacter;
 
 USTRUCT(BlueprintType)
 struct FEquipmentData
@@ -18,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float PlayRate = 1.f;
+
+	UPROPERTY(EditAnywhere)
+	FName StartSection;
 
 	UPROPERTY(EditAnywhere)
 	bool bCanMove = true;
@@ -33,8 +37,19 @@ class THIRDPERSONCPP_API UCActionData : public UDataAsset
 	GENERATED_BODY()
 	
 public:
+	void BeginPlay(ACharacter* InOwnerChacater);
+
+	FORCEINLINE ACEquipment* GetEquipment() { return Equipment; }
+
+private:
+	FString MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName);
+
+public:
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	TSubclassOf<ACEquipment> EquipmentClass;
+
+	UPROPERTY(EditAnywhere, Category = "Equipment")
+	FLinearColor EquipmentColor;
 
 	// Equipment
 	UPROPERTY(EditAnywhere, Category = "Equipment")
