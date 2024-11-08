@@ -1,12 +1,14 @@
 #include "CPlayer.h"
 #include "Global.h"
-#include "GameFramework\SpringArmComponent.h"
-#include "GameFramework\CharacterMovementComponent.h"
-#include "Camera\CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Camera/CameraComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 #include "Components/CAttributeComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
+#include "Actions/CActionData.h"
 
 ACPlayer::ACPlayer()
 {
@@ -32,19 +34,19 @@ ACPlayer::ACPlayer()
 	GetMesh()->SetAnimInstanceClass(AnimClass);
 	
 	// Action Comp
-	CHelpers::CreateActorComponent(this, &ActionComp, "ActionComp");
+	CHelpers::CreateActorComponent(this, &ActionComp,		"ActionComp");
 
 	// Montages Comp
-	CHelpers::CreateActorComponent(this, &MontagesComp, "MontagesComp");
+	CHelpers::CreateActorComponent(this, &MontagesComp,		"MontagesComp");
 
 	// AttributeComp
-	CHelpers::CreateActorComponent(this, &AttributeComp, "AttributeComp");
+	CHelpers::CreateActorComponent(this, &AttributeComp,	"AttributeComp");
 
 	// OptionComp
-	CHelpers::CreateActorComponent(this, &OptionComp, "OptionComp");
+	CHelpers::CreateActorComponent(this, &OptionComp,		"OptionComp");
 
 	// State Comp
-	CHelpers::CreateActorComponent(this, &StateComp, "StateComp");
+	CHelpers::CreateActorComponent(this, &StateComp,		"StateComp");
 
 	// MovementComp
 	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetSprintSpeed();
@@ -57,9 +59,23 @@ void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	StateComp->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
+	// Set Dynamic Material
+	BodyMaterial = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), nullptr);
+	LogoMaterial = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(1), nullptr);
+	
+	GetMesh()->SetMaterial(0, BodyMaterial);
+	GetMesh()->SetMaterial(1, LogoMaterial);
 
+
+	//On StateType Changed
+	StateComp->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 	ActionComp->SetUnarmedMode();
+}
+
+void ACPlayer::SetBodyColor(FLinearColor InColor)
+{
+	BodyMaterial->SetVectorParameterValue("BodyColor", InColor);
+	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
 }
 
 void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -74,8 +90,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAction("Evade",		IE_Pressed, this, &ACPlayer::OnEvade);
 	
-	PlayerInputComponent->BindAction("Evade",		IE_Pressed,		this, &ACPlayer::OnWalk);
-	PlayerInputComponent->BindAction("Evade",		IE_Released,	this, &ACPlayer::OffWalk);
+	PlayerInputComponent->BindAction("Walk",		IE_Pressed,		this, &ACPlayer::OnWalk);
+	PlayerInputComponent->BindAction("Walk",		IE_Released,	this, &ACPlayer::OffWalk);
 
 	PlayerInputComponent->BindAction("Fist",		IE_Pressed,		this, &ACPlayer::OnFist);
 	PlayerInputComponent->BindAction("OneHand",		IE_Released,	this, &ACPlayer::OnOneHand);
@@ -100,7 +116,7 @@ void ACPlayer::OnMoveRight(float Axis)
 	CheckFalse(AttributeComp->IsCanMove());
 
 	FRotator ControlRot = FRotator(0, GetControlRotation().Yaw, 0);
-	FVector Direction	= FQuat(ControlRot).GetRightVector();
+	FVector Direction = FQuat(ControlRot).GetRightVector();
 
 	AddMovementInput(Direction, Axis);
 }
@@ -238,13 +254,28 @@ void ACPlayer::RollingRotation()
 
 void ACPlayer::End_Roll()
 {
+	UCActionData* CurrentDA = ActionComp->GetCurrentDataAsset();
+
+	if (CurrentDA && CurrentDA->EquipmentData.bUseControlRotation)
+	{
+		bUseControllerRotationYaw = true;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+	}
+
 	StateComp->SetIdleMode();
 }
 
 void ACPlayer::End_Backstep()
 {
-	bUseControllerRotationYaw = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	// if (현재 내가 장착한 DA->bUseControl == 1, 0)
+	UCActionData* CurrentDA = ActionComp->GetCurrentDataAsset();
+
+	if (CurrentDA && !CurrentDA->EquipmentData.bUseControlRotation)
+	{
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+	}
+
 
 	StateComp->SetIdleMode();
 }
@@ -258,7 +289,7 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 			Begin_Roll();
 		}
 		break;
-
+		
 		case EStateType::Backstep:
 		{
 			Begin_Backstep();

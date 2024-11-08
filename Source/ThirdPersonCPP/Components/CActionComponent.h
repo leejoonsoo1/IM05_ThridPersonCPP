@@ -27,25 +27,28 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsUnarmedMode()	const { return Type == EActionType::Unarmed; }
+	FORCEINLINE bool IsUnarmedMode()	const	{ return Type == EActionType::Unarmed; }
 	
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsFistMode()		const { return Type == EActionType::Fist; }
+	FORCEINLINE bool IsFistMode()		const	{ return Type == EActionType::Fist; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsOneHandMode()	const { return Type == EActionType::OneHand; }
+	FORCEINLINE bool IsOneHandMode()	const	{ return Type == EActionType::OneHand; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsTwoHandMode()	const { return Type == EActionType::TwoHand; }
+	FORCEINLINE bool IsTwoHandMode()	const	{ return Type == EActionType::TwoHand; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsMagicBallMode()	const { return Type == EActionType::MagicBall; }
+	FORCEINLINE bool IsMagicBallMode()	const	{ return Type == EActionType::MagicBall; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsWarpMode()		const { return Type == EActionType::Warp; }
+	FORCEINLINE bool IsWarpMode()		const	{ return Type == EActionType::Warp; }
 
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsWhirlWindMode()	const { return Type == EActionType::WhirlWind; }
+	FORCEINLINE bool IsWhirlWindMode()	const	{ return Type == EActionType::WhirlWind; }
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE UCActionData* GetCurrentDataAsset()		{ return DataAssets[(int32)Type]; }
 
 	void SetUnarmedMode();
 	void SetFistMode();
@@ -65,7 +68,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DataAsset")
-	UCActionData* DataAssets[EActionType::Max];
+	UCActionData* DataAssets[(int32)EActionType::Max];
 
 private:
 	EActionType Type;

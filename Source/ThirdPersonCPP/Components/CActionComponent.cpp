@@ -80,7 +80,15 @@ void UCActionComponent::SetMode(EActionType InNewType)
 	}
 	else if (!IsUnarmedMode())
 	{
-		DataAssets[(int32)Type]->GetEquipment()->UnEquip(); // Prev Weapon UnEquip
+		if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetEquipment())
+		{
+			DataAssets[(int32)Type]->GetEquipment()->UnEquip(); // Prev Weapon UnEquip
+		}
+	}
+	
+	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetEquipment())
+	{
+		DataAssets[(int32)InNewType]->GetEquipment()->Equip();
 	}
 
 	ChangeType(InNewType);
