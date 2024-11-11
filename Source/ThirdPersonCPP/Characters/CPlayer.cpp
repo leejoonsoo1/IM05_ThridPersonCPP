@@ -9,6 +9,7 @@
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
 #include "Actions/CActionData.h"
+#include "Assignment/CChest.h"
 
 ACPlayer::ACPlayer()
 {
@@ -99,6 +100,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction("MagicBall",	IE_Released,	this, &ACPlayer::OnMagicBall);
 	PlayerInputComponent->BindAction("Warp",		IE_Pressed,		this, &ACPlayer::OnWarp);
 	PlayerInputComponent->BindAction("WhirlWind",	IE_Released,	this, &ACPlayer::OnWhirlWind);
+
+	PlayerInputComponent->BindAction("Interact",	IE_Pressed,		this, &ACPlayer::Interact);
 }
 
 void ACPlayer::OnMoveForward(float Axis)
@@ -209,6 +212,27 @@ void ACPlayer::OnWhirlWind()
 	CheckFalse(StateComp->IsIdleMode());
 	
 	ActionComp->SetWhirlWindMode();
+}
+
+void ACPlayer::Interact()
+{
+	FHitResult HitResult;
+	FVector Start	= GetActorLocation();
+	FVector End		= Start + GetActorForwardVector() * 300;
+
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_WorldDynamic, Params);
+	
+	if (bHit)
+	{
+		ACChest* Chest = Cast<ACChest>(HitResult.GetActor());
+		CheckNull(Chest);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
+
+		Chest->Interact();
+	}
 }
 
 void ACPlayer::Begin_Roll()
