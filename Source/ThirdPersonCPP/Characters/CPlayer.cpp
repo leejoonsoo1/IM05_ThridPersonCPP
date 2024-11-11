@@ -82,13 +82,13 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward",	this, &ACPlayer::OnMoveForward);
-	PlayerInputComponent->BindAxis("MoveRight",		this, &ACPlayer::OnMoveRight);
-	PlayerInputComponent->BindAxis("Turn",			this, &ACPlayer::OnTurn);
-	PlayerInputComponent->BindAxis("LookUp",		this, &ACPlayer::OnLookUp);
-	PlayerInputComponent->BindAxis("Zoom",			this, &ACPlayer::OnZoom);
+	PlayerInputComponent->BindAxis("MoveForward",					this, &ACPlayer::OnMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight",						this, &ACPlayer::OnMoveRight);
+	PlayerInputComponent->BindAxis("Turn",							this, &ACPlayer::OnTurn);
+	PlayerInputComponent->BindAxis("LookUp",						this, &ACPlayer::OnLookUp);
+	PlayerInputComponent->BindAxis("Zoom",							this, &ACPlayer::OnZoom);
 
-	PlayerInputComponent->BindAction("Evade",		IE_Pressed, this, &ACPlayer::OnEvade);
+	PlayerInputComponent->BindAction("Evade",		IE_Pressed,		this, &ACPlayer::OnEvade);
 	
 	PlayerInputComponent->BindAction("Walk",		IE_Pressed,		this, &ACPlayer::OnWalk);
 	PlayerInputComponent->BindAction("Walk",		IE_Released,	this, &ACPlayer::OffWalk);

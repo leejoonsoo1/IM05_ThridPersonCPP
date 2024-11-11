@@ -44,6 +44,9 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FEquipmentDelegate OnEquipmentDelegate;
 
+	UPROPERTY(BlueprintAssignable)
+	FEquipmentDelegate OnUnEquipmentDelegate;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	ACharacter*	OwnerCharacter;

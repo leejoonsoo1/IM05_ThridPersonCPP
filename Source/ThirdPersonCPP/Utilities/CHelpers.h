@@ -24,6 +24,16 @@ public:
 	}
 
 	template<typename T>
+	static void GetAssetDynamic(T** OutAsset, FString InPath)
+	{
+		T* Asset = Cast<T>(StaticLoadObject(T::StaticClass(), nullptr, *InPath));
+		ensureMsgf(Asset, TEXT("Asset not found"));
+
+		*OutAsset = Asset;
+	}
+	
+
+	template<typename T>
 	static void GetClass(TSubclassOf<T>* OutClass, FString InPath)
 	{
 		ConstructorHelpers::FClassFinder<T> AssetClass(*InPath);

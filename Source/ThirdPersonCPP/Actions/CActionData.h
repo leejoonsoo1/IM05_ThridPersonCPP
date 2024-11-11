@@ -5,8 +5,9 @@
 #include "CActionData.generated.h"
 
 class UAnimMontage;
-class ACEquipment;
 class ACharaacter;
+class ACEquipment;
+class ACAttachment;
 
 USTRUCT(BlueprintType)
 struct FEquipmentData
@@ -51,10 +52,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	FLinearColor EquipmentColor;
 
+	UPROPERTY(EditAnywhere, Category = "Attachment")
+	TSubclassOf<ACAttachment> AttachmentClass;
+
 	// Equipment
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	FEquipmentData EquipmentData;
 
 private:
 	ACEquipment* Equipment;
+	ACAttachment* Attachment;
 };

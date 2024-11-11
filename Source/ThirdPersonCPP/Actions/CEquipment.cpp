@@ -13,11 +13,11 @@ ACEquipment::ACEquipment()
 
 void ACEquipment::BeginPlay()
 {
-	Super::BeginPlay();
-	
 	OwnerCharacter	= Cast<ACharacter>(GetOwner());
 	StateComp		= CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
 	AttributeComp	= CHelpers::GetComponent<UCAttributeComponent>(OwnerCharacter);
+	
+	Super::BeginPlay();
 }
 
 void ACEquipment::SetData(FEquipmentData& InData)
@@ -59,17 +59,19 @@ void ACEquipment::Equip_Implementation()
 
 void ACEquipment::UnEquip_Implementation()
 {
-	OnEquipmentDelegate.Broadcast();
+	OwnerCharacter->bUseControllerRotationYaw = false;
+	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	OnUnEquipmentDelegate.Broadcast();
 }
 
 void ACEquipment::Begin_Equip_Implementation()
 {
-	StateComp->SetIdleMode();
-	AttributeComp->SetMove();
+	OnEquipmentDelegate.Broadcast();
 }
 
 void ACEquipment::End_Equip_Implementation()
 {
-	OwnerCharacter->bUseControllerRotationYaw = false;
-	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+	StateComp->SetIdleMode();
+	AttributeComp->SetMove();
 }
