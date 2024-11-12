@@ -10,6 +10,7 @@
 #include "Components/CActionComponent.h"
 #include "Actions/CActionData.h"
 #include "Assignment/CChest.h"
+#include "Assignment/CDoor.h"
 
 ACPlayer::ACPlayer()
 {
@@ -227,11 +228,25 @@ void ACPlayer::Interact()
 	
 	if (bHit)
 	{
-		ACChest* Chest = Cast<ACChest>(HitResult.GetActor());
-		CheckNull(Chest);
-		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
+		AActor* HitActor = HitResult.GetActor();
+		CheckNull(HitActor);
 
-		Chest->Interact();
+		if (HitActor->IsA(ACChest::StaticClass()))
+		{
+			ACChest* Chest = Cast<ACChest>(HitActor);
+			CheckNull(Chest);
+			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
+
+			Chest->Interact();
+		}
+		else if (HitActor->IsA(ACDoor::StaticClass()))
+		{
+			ACDoor* Door = Cast<ACDoor>(HitActor);
+			CheckNull(Door);
+			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
+
+			Door->Interact();
+		}
 	}
 }
 

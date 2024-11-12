@@ -8,7 +8,7 @@ ACChest::ACChest()
 	CHelpers::CreateSceneComponent(this, &RootComp,			"RootComp");
 	CHelpers::CreateSceneComponent(this, &BottomMeshComp,	"BottomMeshComp",	RootComp);
 	CHelpers::CreateSceneComponent(this, &TopMeshComp,		"TopMeshComp",		BottomMeshComp);
-	CHelpers::CreateSceneComponent(this, &BoxCollision,		"BoxCollision",		BottomMeshComp);
+	//CHelpers::CreateSceneComponent(this, &BoxCollision,		"BoxCollision",		BottomMeshComp);
 
 	UStaticMesh* TopMeshAsset, * BottomMeshAsset;
 	CHelpers::GetAsset(&TopMeshAsset,		"/Game/Assignment/Chest/SM_ChestTop");
@@ -19,7 +19,7 @@ ACChest::ACChest()
 
 	SymbolColor = FLinearColor(0.f, 50.f, 0.f);
 	bRunConstructionScriptOnDrag = false;
-	BoxCollision->SetBoxExtent(FVector(64.f, 64.f, 64.f));
+	//BoxCollision->SetBoxExtent(FVector(64.f, 64.f, 64.f));
 
 	Toggle = false;
 

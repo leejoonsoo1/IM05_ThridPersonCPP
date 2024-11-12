@@ -13,13 +13,15 @@ ACDoor::ACDoor()
 	CHelpers::GetAsset(&FramMeshAsset, "/Game/Assignment/Door/SM_DoorFrame");
 	CHelpers::GetAsset(&DoorMeshAsset, "/Game/Assignment/Door/SM_Door");
 
-	DoorMeshComp->SetRelativeLocation(FVector(0, 45, 0));
+	DoorMeshComp->SetRelativeLocation(FVector(0, 1, 0));
 
 	FrameMeshComp->SetStaticMesh(FramMeshAsset);
 	DoorMeshComp->SetStaticMesh(DoorMeshAsset);
 
-	SymbolColor = FLinearColor(0, 1000, 0);
+	SymbolColor = FLinearColor(0.f, 100.f, 0.f);
 	bRunConstructionScriptOnDrag = false;
+
+	Toggle = false;
 }
 
 void ACDoor::OnConstruction(const FTransform& Transform)
@@ -27,7 +29,7 @@ void ACDoor::OnConstruction(const FTransform& Transform)
 	Super::OnConstruction(Transform);
 
 	UMaterialInterface* Material;
-	CHelpers::GetAssetDynamic(&Material, "/Game/Assignment/Chest/MI_Chest");
+	CHelpers::GetAssetDynamic(&Material, "/Game/Assignment/Door/MI_Door");
 
 	if (Material)
 	{
@@ -43,9 +45,21 @@ void ACDoor::OnConstruction(const FTransform& Transform)
 	}
 }
 
-// Called when the game starts or when spawned
 void ACDoor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void ACDoor::Interact()
+{
+	if (Toggle)
+	{
+		DoorMeshComp->SetRelativeRotation(FQuat(FRotator(0, 0, 0)));
+		Toggle = false;
+	}
+	else
+	{
+		DoorMeshComp->SetRelativeRotation(FQuat(FRotator(0, 90, 0)));
+		Toggle = true;
+	}
 }

@@ -16,6 +16,9 @@ protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
 
+public:
+	void Interact();
+
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	USceneComponent* RootComp;
@@ -32,4 +35,7 @@ private:
 
 private:
 	class UMaterialInstanceDynamic* DynamicMaterial;
+
+private:
+	bool Toggle;
 };
