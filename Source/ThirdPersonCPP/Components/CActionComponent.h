@@ -26,6 +26,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	void PrimaryAction();
+
+public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsUnarmedMode()	const	{ return Type == EActionType::Unarmed; }
 	

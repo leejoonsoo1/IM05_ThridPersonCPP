@@ -66,7 +66,6 @@ void ACPlayer::BeginPlay()
 	GetMesh()->SetMaterial(0, BodyMaterial);
 	GetMesh()->SetMaterial(1, LogoMaterial);
 
-
 	//On StateType Changed
 	StateComp->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
 	ActionComp->SetUnarmedMode();
@@ -82,23 +81,26 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward",					this, &ACPlayer::OnMoveForward);
-	PlayerInputComponent->BindAxis("MoveRight",						this, &ACPlayer::OnMoveRight);
-	PlayerInputComponent->BindAxis("Turn",							this, &ACPlayer::OnTurn);
-	PlayerInputComponent->BindAxis("LookUp",						this, &ACPlayer::OnLookUp);
-	PlayerInputComponent->BindAxis("Zoom",							this, &ACPlayer::OnZoom);
+	PlayerInputComponent->BindAxis("MoveForward",						this, &ACPlayer::OnMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight",							this, &ACPlayer::OnMoveRight);
+	PlayerInputComponent->BindAxis("Turn",								this, &ACPlayer::OnTurn);
+	PlayerInputComponent->BindAxis("LookUp",							this, &ACPlayer::OnLookUp);
+	PlayerInputComponent->BindAxis("Zoom",								this, &ACPlayer::OnZoom);
 
-	PlayerInputComponent->BindAction("Evade",		IE_Pressed,		this, &ACPlayer::OnEvade);
+	PlayerInputComponent->BindAction("Evade",			IE_Pressed,		this, &ACPlayer::OnEvade);
 	
-	PlayerInputComponent->BindAction("Walk",		IE_Pressed,		this, &ACPlayer::OnWalk);
-	PlayerInputComponent->BindAction("Walk",		IE_Released,	this, &ACPlayer::OffWalk);
+	PlayerInputComponent->BindAction("Walk",			IE_Pressed,		this, &ACPlayer::OnWalk);
+	PlayerInputComponent->BindAction("Walk",			IE_Released,	this, &ACPlayer::OffWalk);
 
-	PlayerInputComponent->BindAction("Fist",		IE_Pressed,		this, &ACPlayer::OnFist);
-	PlayerInputComponent->BindAction("OneHand",		IE_Released,	this, &ACPlayer::OnOneHand);
-	PlayerInputComponent->BindAction("TwoHand",		IE_Pressed,		this, &ACPlayer::OnTwoHand);
-	PlayerInputComponent->BindAction("MagicBall",	IE_Released,	this, &ACPlayer::OnMagicBall);
-	PlayerInputComponent->BindAction("Warp",		IE_Pressed,		this, &ACPlayer::OnWarp);
-	PlayerInputComponent->BindAction("WhirlWind",	IE_Released,	this, &ACPlayer::OnWhirlWind);
+	PlayerInputComponent->BindAction("Fist",			IE_Pressed,		this, &ACPlayer::OnFist);
+	PlayerInputComponent->BindAction("OneHand",			IE_Released,	this, &ACPlayer::OnOneHand);
+	PlayerInputComponent->BindAction("TwoHand",			IE_Pressed,		this, &ACPlayer::OnTwoHand);
+	PlayerInputComponent->BindAction("MagicBall",		IE_Released,	this, &ACPlayer::OnMagicBall);
+	PlayerInputComponent->BindAction("Warp",			IE_Pressed,		this, &ACPlayer::OnWarp);
+	PlayerInputComponent->BindAction("WhirlWind",		IE_Released,	this, &ACPlayer::OnWhirlWind);
+
+	PlayerInputComponent->BindAction("PrimaryAction",	IE_Pressed,		this, &ACPlayer::OnPrimaryAction);
+	PlayerInputComponent->BindAction("Secondary",		IE_Pressed,		this, &ACPlayer::OnSecondaryAction);
 }
 
 void ACPlayer::OnMoveForward(float Axis)
@@ -209,6 +211,15 @@ void ACPlayer::OnWhirlWind()
 	CheckFalse(StateComp->IsIdleMode());
 	
 	ActionComp->SetWhirlWindMode();
+}
+
+void ACPlayer::OnPrimaryAction()
+{
+	ActionComp->PrimaryAction();
+}
+
+void ACPlayer::OnSecondaryAction()
+{
 }
 
 void ACPlayer::Begin_Roll()

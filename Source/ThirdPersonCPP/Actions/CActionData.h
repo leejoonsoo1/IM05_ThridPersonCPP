@@ -8,7 +8,13 @@ class UAnimMontage;
 class ACharaacter;
 class ACEquipment;
 class ACAttachment;
+class ACDoAction;
+class UParticleSystem;
+class UCameraShake;
 
+//-----------------------------------------------------------------------------
+// Struct FEquipmentData
+//-----------------------------------------------------------------------------
 USTRUCT(BlueprintType)
 struct FEquipmentData
 {
@@ -32,6 +38,35 @@ public:
 	bool bUseControlRotation = true;
 
 };
+
+//-----------------------------------------------------------------------------
+// Struct FActionData
+//-----------------------------------------------------------------------------
+USTRUCT(BlueprintType)
+struct FActionData : public FEquipmentData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere)
+	float Damage = 5.f;
+
+	UPROPERTY(EditAnywhere)
+	float HitStop;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* Effect;
+
+	UPROPERTY(EditAnywhere)
+	FTransform EffectTransform;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraShake> ShakeClass;
+};
+
+//-----------------------------------------------------------------------------
+// Class UCActionData
+//-----------------------------------------------------------------------------
 UCLASS()
 class THIRDPERSONCPP_API UCActionData : public UDataAsset
 {
@@ -40,7 +75,8 @@ class THIRDPERSONCPP_API UCActionData : public UDataAsset
 public:
 	void BeginPlay(ACharacter* InOwnerChacater);
 
-	FORCEINLINE ACEquipment* GetEquipment() { return Equipment; }
+	FORCEINLINE ACEquipment*	GetEquipment()	{ return Equipment; }
+	FORCEINLINE ACDoAction*		GetDoAction()	{ return DoAction; }
 
 private:
 	FString MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName);
@@ -55,11 +91,18 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Attachment")
 	TSubclassOf<ACAttachment> AttachmentClass;
 
+	UPROPERTY(EditAnywhere, Category = "Attachment")
+	TSubclassOf<ACDoAction> DoActionClass;
+
+	UPROPERTY(EditAnywhere, Category = "Equipment")
+	TArray<FActionData> DoActionDatas;
+
 	// Equipment
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	FEquipmentData EquipmentData;
 
 private:
-	ACEquipment* Equipment;
-	ACAttachment* Attachment;
+	ACEquipment*	Equipment;
+	ACAttachment*	Attachment;
+	ACDoAction*		DoAction;
 };
