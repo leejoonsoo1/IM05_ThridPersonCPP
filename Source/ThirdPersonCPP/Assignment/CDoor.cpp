@@ -13,7 +13,7 @@ ACDoor::ACDoor()
 	CHelpers::GetAsset(&FramMeshAsset, "/Game/Assignment/Door/SM_DoorFrame");
 	CHelpers::GetAsset(&DoorMeshAsset, "/Game/Assignment/Door/SM_Door");
 
-	DoorMeshComp->SetRelativeLocation(FVector(0, 1, 0));
+	//DoorMeshComp->SetRelativeLocation(FVector(0, 1, 0));
 
 	FrameMeshComp->SetStaticMesh(FramMeshAsset);
 	DoorMeshComp->SetStaticMesh(DoorMeshAsset);
