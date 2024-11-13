@@ -9,6 +9,7 @@ class UCAttributeComponent;
 class UCStateComponent;
 class UCMontagesComponent;
 class UCActionComponent;
+class UWidgetComponent;
 
 UCLASS()
 class THIRDPERSONCPP_API ACEnemy : public ACharacter, public ICCharacterInterface
@@ -32,7 +33,13 @@ protected:
 	UCMontagesComponent*	MontagesComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UCActionComponent*		ActionComp;
+	UCActionComponent*		ActionComp;	
+	
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UWidgetComponent*		NameWidgetComp;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UWidgetComponent*		HealthWidgetComp;
 
 
 protected:

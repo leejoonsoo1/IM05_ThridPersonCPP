@@ -37,7 +37,15 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
 		DoAction->SetDatas(DoActionDatas);
 		DoAction->SetActorLabel(MakeLabel(InOwnerCharacter, "DoAction"));
 		DoAction->FinishSpawning(TM);
+
+		if (Attachment)
+		{
+			Attachment->OnAttachmentBeginOverlap.AddDynamic((DoAction, &ACDoAction::OnAttachmentBeginOverlap));
+			Attachment->OnAttachmentEndOverlap.AddDynamic((DoAction, &ACDoAction::OnAttachmentEndOverlap));
+		}
 	}
+
+	
 }
 
 FString UCActionData::MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName)

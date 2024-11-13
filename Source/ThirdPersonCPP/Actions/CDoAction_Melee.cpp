@@ -32,3 +32,16 @@ void ACDoAction_Melee::End_PrimaryAction()
 	AttributeComp->SetMove();
 }
 
+void ACDoAction_Melee::OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)
+{
+	Super::OnAttachmentBeginOverlap(InAttacker, InCauser, InOtherCharacter);
+
+	FDamageEvent Damage;
+	InOtherCharacter->TakeDamage(Datas[ComboCount].Damage, Damage, InAttacker->GetController(), InCauser);
+}
+
+void ACDoAction_Melee::OnAttachmentEndOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)
+{
+	Super::OnAttachmentEndOverlap(InAttacker, InCauser, InOtherCharacter)
+}
+
