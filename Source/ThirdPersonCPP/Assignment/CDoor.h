@@ -18,6 +18,7 @@ protected:
 
 public:
 	void Interact();
+	FLinearColor GetSymbolColor();
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
@@ -29,7 +30,6 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UStaticMeshComponent* DoorMeshComp;
 
-private:
 	UPROPERTY(EditInstanceOnly, Category = "SysmbolColor")
 	FLinearColor SymbolColor;
 

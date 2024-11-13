@@ -65,3 +65,8 @@ void ACChest::Interact()
 		Toggle = true;
 	}
 }
+
+FLinearColor ACChest::GetSymbolColor()
+{
+	return SymbolColor;
+}

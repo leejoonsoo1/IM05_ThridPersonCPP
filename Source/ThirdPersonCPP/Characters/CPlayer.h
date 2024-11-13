@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
 #include "Interfaces/CCharacterInterface.h"
+#include "Containers/Map.h"
 #include "CPlayer.generated.h"
 
 class USpringArmComponent;
@@ -14,6 +15,7 @@ class UCStateComponent;
 class UCMontagesComponent;
 class UCActionComponent;
 class UMaterialInstanceDynamic;
+class UCWidget;
 
 UCLASS()
 class THIRDPERSONCPP_API ACPlayer : public ACharacter, public ICCharacterInterface
@@ -63,6 +65,9 @@ public:
 	void End_Backstep();
 
 private:
+	void RootKey(FLinearColor FindKey);
+
+private:
 	UFUNCTION()
 	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
@@ -88,7 +93,16 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UCActionComponent* ActionComp;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<UCWidget> KeyWidgetClass;
+
 private:
 	UMaterialInstanceDynamic* BodyMaterial;
 	UMaterialInstanceDynamic* LogoMaterial;
+
+public:
+	class UCWidget* KeyWidget;
+
+private:
+	TMap<FLinearColor, bool> Key;
 };

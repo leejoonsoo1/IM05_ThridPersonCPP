@@ -8,9 +8,13 @@
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Actions/CActionData.h"
 #include "Assignment/CChest.h"
 #include "Assignment/CDoor.h"
+#include "Blueprint/UserWidget.h"
+#include "Assignment/CWidget.h"
+#include "Math\UnrealMathUtility.h"
 
 ACPlayer::ACPlayer()
 {
@@ -55,11 +59,21 @@ ACPlayer::ACPlayer()
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
+
+	// User Widget
+	CHelpers::GetClass(&KeyWidgetClass, "/Game/UI/WB_HasKeys");
 }
 
 void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (KeyWidgetClass)
+	{
+		KeyWidget = CreateWidget<UCWidget>(GetController<APlayerController>(), KeyWidgetClass);
+		KeyWidget->AddToViewport();
+		KeyWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 
 	// Set Dynamic Material
 	BodyMaterial = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), nullptr);
@@ -67,7 +81,6 @@ void ACPlayer::BeginPlay()
 	
 	GetMesh()->SetMaterial(0, BodyMaterial);
 	GetMesh()->SetMaterial(1, LogoMaterial);
-
 
 	//On StateType Changed
 	StateComp->OnStateTypeChanged.AddDynamic(this, &ACPlayer::OnStateTypeChanged);
@@ -218,11 +231,12 @@ void ACPlayer::OnWhirlWind()
 void ACPlayer::Interact()
 {
 	FHitResult HitResult;
+	FLinearColor KeyColor;
+	FCollisionQueryParams Params;
 	FVector Start	= GetActorLocation();
 	FVector End		= Start + GetActorForwardVector() * 300;
 
-	FCollisionQueryParams Params;
-	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(this);;
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_WorldDynamic, Params);
 	
@@ -237,6 +251,14 @@ void ACPlayer::Interact()
 			CheckNull(Chest);
 			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
 
+			KeyColor = Chest->GetSymbolColor();
+
+			KeyColor.R = FMath::Clamp(KeyColor.R, 0.f, 1.f);
+			KeyColor.G = FMath::Clamp(KeyColor.G, 0.f, 1.f);
+			KeyColor.B = FMath::Clamp(KeyColor.B, 0.f, 1.f);
+
+			KeyWidget->SetKey(KeyColor);
+			RootKey(KeyColor);
 			Chest->Interact();
 		}
 		else if (HitActor->IsA(ACDoor::StaticClass()))
@@ -245,7 +267,26 @@ void ACPlayer::Interact()
 			CheckNull(Door);
 			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
 
-			Door->Interact();
+			FLinearColor DoorColor = Door->GetSymbolColor();
+
+			DoorColor.R = FMath::Clamp(DoorColor.R, 0.f, 1.f);
+			DoorColor.G	= FMath::Clamp(DoorColor.G, 0.f, 1.f);
+			DoorColor.B	= FMath::Clamp(DoorColor.B, 0.f, 1.f);
+
+			if (Key.Find(DoorColor))
+			{
+				Door->Interact();
+			}
+			else
+			{
+				FVector Location	= HitResult.ImpactPoint;
+				FString DebugText	= TEXT("You don't have a key");
+				FColor TextColor	= FColor::White;
+				float Duration		= 3.f;
+				bool bDrawShadow		= true;
+
+				DrawDebugString(GetWorld(), Location, DebugText, nullptr, TextColor, Duration, bDrawShadow);
+			}
 		}
 	}
 }
@@ -315,8 +356,12 @@ void ACPlayer::End_Backstep()
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 
-
 	StateComp->SetIdleMode();
+}
+
+void ACPlayer::RootKey(FLinearColor FindKey)
+{
+	Key.Add(FindKey, true);
 }
 
 void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)

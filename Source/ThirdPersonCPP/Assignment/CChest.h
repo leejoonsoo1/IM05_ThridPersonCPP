@@ -20,6 +20,7 @@ protected:
 
 public:
 	void Interact();
+	FLinearColor GetSymbolColor();
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")

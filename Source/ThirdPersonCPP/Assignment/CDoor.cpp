@@ -63,3 +63,8 @@ void ACDoor::Interact()
 		Toggle = true;
 	}
 }
+
+FLinearColor ACDoor::GetSymbolColor()
+{
+	return SymbolColor;
+}
