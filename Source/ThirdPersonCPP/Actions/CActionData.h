@@ -76,6 +76,7 @@ public:
 	void BeginPlay(ACharacter* InOwnerChacater);
 
 	FORCEINLINE ACEquipment*	GetEquipment()	{ return Equipment; }
+	FORCEINLINE ACAttachment*	GetAttachment()	{ return Attachment; }
 	FORCEINLINE ACDoAction*		GetDoAction()	{ return DoAction; }
 
 private:

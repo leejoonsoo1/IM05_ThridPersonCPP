@@ -40,12 +40,10 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
 
 		if (Attachment)
 		{
-			Attachment->OnAttachmentBeginOverlap.AddDynamic((DoAction, &ACDoAction::OnAttachmentBeginOverlap));
-			Attachment->OnAttachmentEndOverlap.AddDynamic((DoAction, &ACDoAction::OnAttachmentEndOverlap));
+			Attachment->OnAttachmentBeginOverlap.AddDynamic(DoAction,	&ACDoAction::OnAttachmentBeginOverlap);
+			Attachment->OnAttachmentEndOverlap.AddDynamic(DoAction,		&ACDoAction::OnAttachmentEndOverlap);
 		}
 	}
-
-	
 }
 
 FString UCActionData::MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName)

@@ -4,7 +4,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/CAttributeComponent.h"
-#include "Components/CStateComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
@@ -77,6 +76,10 @@ void ACEnemy::BeginPlay()
 	// On StateType Changed
 	ActionComp->SetUnarmedMode();
 
+	//On StateType Changed
+	StateComp->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);
+	ActionComp->SetUnarmedMode();
+
 	// Widget Settings
 	NameWidgetComp->InitWidget();
 	UCNameWidget* NameWidgetObject = Cast<UCNameWidget>(NameWidgetComp->GetUserWidgetObject());
@@ -100,8 +103,65 @@ void ACEnemy::BeginPlay()
 	}
 }
 
+float ACEnemy::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	DamageInstigator = EventInstigator;
+	DamageValue = ActualDamage;
+
+	AttributeComp->DecreaseHealth(Damage);
+
+	if (AttributeComp->GetCurrentHealth() <= 0.f)
+	{
+		StateComp->SetDeadMode();
+		
+		return ActualDamage;
+	}
+
+	StateComp->SetHittedMode();
+
+	return ActualDamage;
+}
+
 void ACEnemy::SetBodyColor(FLinearColor InColor)
 {
 	BodyMaterial->SetVectorParameterValue("BodyColor", InColor);
 	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
+}
+
+void ACEnemy::Hitted()
+{
+	UCHealthWidget* HealthWidgetObject = Cast<UCHealthWidget>(HealthWidgetComp->GetUserWidgetObject());
+
+	if (HealthWidgetObject)
+	{
+		HealthWidgetObject->Update(AttributeComp->GetCurrentHealth(), AttributeComp->GetMaxHealth());
+	}
+}
+
+void ACEnemy::Dead()
+{
+	FString Message = GetName();
+	Message.Append(" is dead.");
+
+	CLog::Print(Message, -1, 2.f, FColor::Red);
+}
+
+void ACEnemy::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
+{
+	switch (InNewType)
+	{
+	case EStateType::Hitted:
+	{
+		Hitted();
+	}
+	break;
+
+	case EStateType::Dead:
+	{
+		Dead();
+	}
+	break;
+	}
 }

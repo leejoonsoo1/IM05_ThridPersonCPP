@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/CCharacterInterface.h"
+#include "Components/CStateComponent.h"
 #include "CEnemy.generated.h"
 
 class UCAttributeComponent;
@@ -19,8 +20,21 @@ class THIRDPERSONCPP_API ACEnemy : public ACharacter, public ICCharacterInterfac
 public:
 	ACEnemy();
 
+protected:
+	void BeginPlay() override;
+
+public:
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 public:
 	virtual void SetBodyColor(FLinearColor InColor) override;
+
+	void Hitted();
+	void Dead();
+
+private:
+	UFUNCTION()
+	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
@@ -41,9 +55,9 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UWidgetComponent*		HealthWidgetComp;
 
-
-protected:
-	virtual void BeginPlay() override;
+private:
+	AController* DamageInstigator;
+	float DamageValue;
 
 private:
 	UMaterialInstanceDynamic* BodyMaterial;

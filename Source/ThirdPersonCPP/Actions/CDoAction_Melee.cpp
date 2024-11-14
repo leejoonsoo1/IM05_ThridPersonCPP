@@ -11,7 +11,6 @@ void ACDoAction_Melee::PrimaryAction()
 	CheckFalse(Datas.Num() > 0);
 	CheckFalse(StateComp->IsIdleMode());
 
-
 	StateComp->SetActionMode();
 	OwnerCharacter->PlayAnimMontage(Datas[0].Montage, Datas[0].PlayRate, Datas[0].StartSection);
 
@@ -42,6 +41,6 @@ void ACDoAction_Melee::OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* 
 
 void ACDoAction_Melee::OnAttachmentEndOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)
 {
-	Super::OnAttachmentEndOverlap(InAttacker, InCauser, InOtherCharacter)
+	Super::OnAttachmentEndOverlap(InAttacker, InCauser, InOtherCharacter);
 }
 

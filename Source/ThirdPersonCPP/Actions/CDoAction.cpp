@@ -7,7 +7,6 @@
 ACDoAction::ACDoAction()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void ACDoAction::BeginPlay()

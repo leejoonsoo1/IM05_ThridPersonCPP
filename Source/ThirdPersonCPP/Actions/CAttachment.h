@@ -7,17 +7,14 @@
 class ACharacter;
 class UShapeComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentBeginOverlap, ACharacter*, InAttacker, AActor*, InCauser, ACharacter*, InOtherCharacter);
-
-//DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_SixParams(FComponentBeginOverlapSignature, UPrimitiveComponent, OnComponentBeginOverlap, UPrimitiveComponent*, OverlappedComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, int32, OtherBodyIndex, bool, bFromSweep, const FHitResult&, SweepResult);
-//DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_FourParams(FComponentEndOverlapSignature, UPrimitiveComponent, OnComponentEndOverlap, UPrimitiveComponent*, OverlappedComponent, AActor*, OtherActor, UPrimitiveComponent*, OtherComp, int32, OtherBodyIndex);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentOverlap, ACharacter*, InAttacker, AActor*, InCauser, ACharacter*, InOtherCharacter);
 
 UCLASS()
 class THIRDPERSONCPP_API ACAttachment : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	ACAttachment();
 
 protected:
@@ -25,11 +22,12 @@ protected:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void ActorAttachTo(FName InSocketName);
+		void ActorAttachTo(FName InSocketName);
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnEquip();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnUnEquip();
 
@@ -39,19 +37,19 @@ public:
 
 private:
 	UFUNCTION()
-	void OnComponentBeginOverlap(UPrimitiveComponent* OnComponentBeginOverlap, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-	void OnComponentEndOverlap(UPrimitiveComponent* OnComponentEndOverlap, UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 public:
 	UPROPERTY(BlueprintAssignable)
-	FAttachmentBeginOverlap OnAttachmentBeginOverlap;
+	FAttachmentOverlap OnAttachmentBeginOverlap;
 
 	UPROPERTY(BlueprintAssignable)
-	FAttachmentBeginOverlap OnAttachmentEndOverlap;
+	FAttachmentOverlap OnAttachmentEndOverlap;
 
-	protected:
+protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	USceneComponent* RootComp;
 
