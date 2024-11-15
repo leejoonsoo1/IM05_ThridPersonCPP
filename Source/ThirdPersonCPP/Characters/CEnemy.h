@@ -36,6 +36,9 @@ private:
 	void Hitted();
 	void Dead();
 
+	UFUNCTION()
+	void ResotreBodyColor();
+
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UCAttributeComponent*	AttributeComp;
