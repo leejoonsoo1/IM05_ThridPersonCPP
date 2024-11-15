@@ -23,6 +23,8 @@ void UCAnimNotifyState_Collision::NotifyBegin(USkeletalMeshComponent* MeshComp, 
     ACAttachment* Attachment = ActionData->GetAttachment();
     CheckNull(Attachment);
 
+    CLog::Log("UCAnimNotifyState_Collision::NotifyBegi");
+
     Attachment->OnCollision();
 }
 

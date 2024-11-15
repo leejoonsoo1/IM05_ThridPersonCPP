@@ -19,6 +19,8 @@ void ACAttachment::BeginPlay()
 		Comp->OnComponentEndOverlap.AddDynamic(this,	&ACAttachment::OnComponentEndOverlap);
 	}
 
+	OffCollision();
+
 	Super::BeginPlay();
 }
 
@@ -26,7 +28,9 @@ void ACAttachment::OnCollision()
 {
 	for (const auto& Comp : ShapeComponents)
 	{
-		Comp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		CLog::Log("ACAttachment::OnCollision");
+
+		Comp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	}
 }
 
@@ -46,7 +50,9 @@ void ACAttachment::ActorAttachTo(FName InSocketName)
 void ACAttachment::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	CheckTrue(OwnerCharacter == OtherActor);
-	CheckTrue(OwnerCharacter->GetClass() == OtherActor->GetClass())
+	CheckTrue(OwnerCharacter->GetClass() == OtherActor->GetClass());
+
+	CLog::Log("ACAttachment::OnComponentBeginOverlap");
 
 	ACharacter* OtherCharacter = Cast<ACharacter>(OtherActor);
 	if (OwnerCharacter && OtherActor)

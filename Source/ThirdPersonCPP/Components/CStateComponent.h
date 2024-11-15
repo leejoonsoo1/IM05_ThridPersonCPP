@@ -39,6 +39,11 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool IsActionMode() { return Type == EStateType::Action; }
 
+	UFUNCTION(BlueprintPure)
+	bool IsHittedMode() { return Type == EStateType::Hitted; }
+	UFUNCTION(BlueprintPure)
+	bool IsDeadMode() { return Type == EStateType::Dead; }
+
 	void SetIdleMode();
 	void SetRollMode();
 	void SetBackstepMode();

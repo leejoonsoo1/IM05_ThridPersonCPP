@@ -25,4 +25,3 @@ void UCAnimNotify_BeginPrimaryAction::Notify(USkeletalMeshComponent* MeshComp, U
 
 	DoAction->Begin_PrimaryAction();
 }
-

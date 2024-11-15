@@ -27,10 +27,12 @@ void UCActionComponent::BeginPlay()
 
 void UCActionComponent::PrimaryAction()
 {
+	CLog::Log("UCActionComponent::PrimaryAction");
 	CheckTrue(IsUnarmedMode());
 
 	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetDoAction())
 	{
+		CLog::Log("DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetDoAction()");
 		DataAssets[(int32)Type]->GetDoAction()->PrimaryAction();
 	}
 }

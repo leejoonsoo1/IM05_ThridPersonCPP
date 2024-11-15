@@ -29,12 +29,12 @@ public:
 public:
 	virtual void SetBodyColor(FLinearColor InColor) override;
 
-	void Hitted();
-	void Dead();
-
 private:
 	UFUNCTION()
 	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
+
+	void Hitted();
+	void Dead();
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
@@ -54,6 +54,10 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
 	UWidgetComponent*		HealthWidgetComp;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Hiited")
+	float LaunchValue;
 
 private:
 	AController* DamageInstigator;

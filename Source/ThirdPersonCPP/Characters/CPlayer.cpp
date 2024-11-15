@@ -215,6 +215,7 @@ void ACPlayer::OnWhirlWind()
 
 void ACPlayer::OnPrimaryAction()
 {
+	CLog::Log("ACPlayer::OnPrimaryAction");
 	ActionComp->PrimaryAction();
 }
 

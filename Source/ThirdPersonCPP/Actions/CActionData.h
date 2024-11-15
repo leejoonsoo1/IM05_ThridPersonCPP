@@ -89,18 +89,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	FLinearColor EquipmentColor;
 
-	UPROPERTY(EditAnywhere, Category = "Attachment")
-	TSubclassOf<ACAttachment> AttachmentClass;
-
-	UPROPERTY(EditAnywhere, Category = "Attachment")
-	TSubclassOf<ACDoAction> DoActionClass;
-
-	UPROPERTY(EditAnywhere, Category = "Equipment")
-	TArray<FActionData> DoActionDatas;
-
 	// Equipment
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	FEquipmentData EquipmentData;
+
+	UPROPERTY(EditAnywhere, Category = "Attachment")
+	TSubclassOf<ACAttachment> AttachmentClass;
+
+	UPROPERTY(EditAnywhere, Category = "DoAction")
+	TSubclassOf<ACDoAction> DoActionClass;
+
+	UPROPERTY(EditAnywhere, Category = "DoAction")
+	TArray<FActionData> DoActionDatas;
+
+
 
 private:
 	ACEquipment*	Equipment;

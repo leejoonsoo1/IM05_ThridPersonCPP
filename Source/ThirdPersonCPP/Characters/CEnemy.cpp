@@ -60,6 +60,8 @@ ACEnemy::ACEnemy()
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
 	//bUseControllerRotationYaw = false;
+
+	LaunchValue = 30.f;
 }
 
 void ACEnemy::BeginPlay()
@@ -72,9 +74,6 @@ void ACEnemy::BeginPlay()
 
 	GetMesh()->SetMaterial(0, BodyMaterial);
 	GetMesh()->SetMaterial(1, LogoMaterial);
-
-	// On StateType Changed
-	ActionComp->SetUnarmedMode();
 
 	//On StateType Changed
 	StateComp->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);
@@ -132,12 +131,24 @@ void ACEnemy::SetBodyColor(FLinearColor InColor)
 
 void ACEnemy::Hitted()
 {
+	CLog::Log("ACEnemy::Hitted");
+
 	UCHealthWidget* HealthWidgetObject = Cast<UCHealthWidget>(HealthWidgetComp->GetUserWidgetObject());
 
 	if (HealthWidgetObject)
 	{
 		HealthWidgetObject->Update(AttributeComp->GetCurrentHealth(), AttributeComp->GetMaxHealth());
 	}
+
+	// Play Hitted Montages
+	MontagesComp->PlayHitted();
+
+	// Hit Back
+	FVector Start			= DamageInstigator->GetPawn()->GetActorLocation();
+	FVector Target			= GetActorLocation();
+	FVector LaunchDirection = (Target - Start).GetSafeNormal();
+	
+	LaunchCharacter(LaunchDirection * DamageValue * LaunchValue, true, false);
 }
 
 void ACEnemy::Dead()
