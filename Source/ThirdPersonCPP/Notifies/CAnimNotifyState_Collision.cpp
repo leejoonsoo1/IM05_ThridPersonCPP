@@ -1,6 +1,7 @@
 #include "CAnimNotifyState_Collision.h"
 #include "Actions/CAttachment.h"
 #include "Actions/CActionData.h"
+#include "Actions/CDoAction_Melee.h"
 #include "Components/CActionComponent.h"
 #include "Global.h"
 
@@ -23,7 +24,7 @@ void UCAnimNotifyState_Collision::NotifyBegin(USkeletalMeshComponent* MeshComp, 
     ACAttachment* Attachment = ActionData->GetAttachment();
     CheckNull(Attachment);
 
-    CLog::Log("UCAnimNotifyState_Collision::NotifyBegi");
+    CLog::Log("UCAnimNotifyState_Collision::NotifyBegin");
 
     Attachment->OnCollision();
 }
@@ -43,5 +44,9 @@ void UCAnimNotifyState_Collision::NotifyEnd(USkeletalMeshComponent* MeshComp, UA
     CheckNull(Attachment);
 
     Attachment->OffCollision();
-}
 
+    ACDoAction_Melee* Melee = Cast<ACDoAction_Melee>(ActionData->GetDoAction());
+    CheckNull(Melee);
+
+    Melee->ClearHittedCharacters();
+}
