@@ -2,6 +2,7 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/CAttributeComponent.h"
 #include "Components/CMontagesComponent.h"
@@ -76,6 +77,10 @@ void ACEnemy::BeginPlay()
 	GetMesh()->SetMaterial(0, BodyMaterial);
 	GetMesh()->SetMaterial(1, LogoMaterial);
 
+	// Get Dissovle Material
+	UMaterialInstanceDynamic* DissolveMaterialAsset;
+	CHelpers::GetAssetDynamic(&DissolveMaterialAsset, "/Game/Materials/MI_Disslove'");
+
 	//On StateType Changed
 	StateComp->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);
 	ActionComp->SetUnarmedMode();
@@ -142,8 +147,7 @@ void ACEnemy::SetBodyColor(FLinearColor InColor)
 
 void ACEnemy::Hitted()
 {
-	CLog::Log("ACEnemy::Hitted");
-
+	// Update Health Widget
 	UCHealthWidget* HealthWidgetObject = Cast<UCHealthWidget>(HealthWidgetComp->GetUserWidgetObject());
 
 	if (HealthWidgetObject)
@@ -168,6 +172,27 @@ void ACEnemy::Hitted()
 
 void ACEnemy::Dead()
 {
+	// Hidden Widgets
+	NameWidgetComp->SetVisibility(false);
+	HealthWidgetComp->SetVisibility(false);
+
+	// Ragdoll
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetCollisionProfileName("Ragdoll");
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->DisableMovement();
+
+	// Add Impluse
+	FVector Start		= GetActorLocation();
+	FVector Target		= DamageInstigator->GetPawn()->GetActorLocation();
+	FVector Direction	= (Start - Target);
+	Direction.Normalize();
+	GetMesh()->AddImpulseAtLocation(Direction * DamageValue * 3000.f, Start);
+
+	// Off All Attachment Collision
+
+	// Destroy
+
 	FString Message = GetName();
 	Message.Append(" is dead.");
 

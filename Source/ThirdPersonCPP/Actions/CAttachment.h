@@ -22,7 +22,10 @@ protected:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-		void ActorAttachTo(FName InSocketName);
+	void ActorAttachTo(FName InSocketName);
+
+	UFUNCTION(BlueprintCallable)
+	void ComponentAttachTo(USceneComponent* InComp, FName InSocketName);
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
