@@ -37,6 +37,24 @@ void UCActionComponent::PrimaryAction()
 	}
 }
 
+void UCActionComponent::Begin_SecondaryAction()
+{
+	CheckTrue(IsUnarmedMode());
+	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetDoAction())
+	{
+		DataAssets[(int32)Type]->GetDoAction()->Begin_SecondaryAction();
+	}
+}
+
+void UCActionComponent::End_SecondaryAction()
+{
+	CheckTrue(IsUnarmedMode());
+	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetDoAction())
+	{
+		DataAssets[(int32)Type]->GetDoAction()->End_SecondaryAction();
+	}
+}
+
 void UCActionComponent::SetUnarmedMode()
 {
 	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetEquipment())

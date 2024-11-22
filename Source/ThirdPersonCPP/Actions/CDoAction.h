@@ -31,6 +31,9 @@ public:
 	virtual void Begin_PrimaryAction() {};
 	virtual void End_PrimaryAction() {};
 
+	virtual void Begin_SecondaryAction() {};
+	virtual void End_SecondaryAction() {};
+
 public:
 	UFUNCTION()
 		virtual void OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter) {};

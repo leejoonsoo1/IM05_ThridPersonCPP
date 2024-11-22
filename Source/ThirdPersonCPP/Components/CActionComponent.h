@@ -28,6 +28,9 @@ protected:
 public:
 	void PrimaryAction();
 
+	void Begin_SecondaryAction();
+	void End_SecondaryAction();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsUnarmedMode()	const	{ return Type == EActionType::Unarmed; }
