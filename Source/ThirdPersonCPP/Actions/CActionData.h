@@ -11,6 +11,7 @@ class ACAttachment;
 class ACDoAction;
 class UParticleSystem;
 class UCameraShake;
+class ACProjectile;
 
 //-----------------------------------------------------------------------------
 // Struct FEquipmentData
@@ -62,6 +63,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UCameraShake> ShakeClass;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ACProjectile> ProjectileClass;
 };
 
 //-----------------------------------------------------------------------------
@@ -101,8 +105,6 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "DoAction")
 	TArray<FActionData> DoActionDatas;
-
-
 
 private:
 	ACEquipment*	Equipment;
