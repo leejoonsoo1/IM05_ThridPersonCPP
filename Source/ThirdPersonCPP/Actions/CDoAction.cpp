@@ -27,4 +27,3 @@ void ACDoAction::SetDatas(TArray<FActionData>& InDatas)
 {
 	Datas = InDatas;
 }
-

@@ -23,7 +23,7 @@ public:
 	void Tick(float DeltaTime);
 
 	FORCEINLINE bool IsZooming() { return bZooming; }
-	FORCEINLINE bool IsAvailiable() { return SpringArmComp && CameraComp; }
+	FORCEINLINE bool IsAvailable() { return SpringArmComp && CameraComp; }
 
 	void On();
 	void Off();

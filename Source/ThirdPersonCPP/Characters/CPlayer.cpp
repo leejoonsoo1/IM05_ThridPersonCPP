@@ -24,13 +24,13 @@ ACPlayer::ACPlayer()
 
 	// MeshComp
 	USkeletalMesh* MeshAsset;
-	CHelpers::GetAsset(&MeshAsset, "/Game/Character/Mesh/SK_Mannequin");
+	CHelpers::GetAsset(&MeshAsset,							"/Game/Character/Mesh/SK_Mannequin");
 	GetMesh()->SetSkeletalMesh(MeshAsset);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
 	TSubclassOf<UAnimInstance> AnimClass;
-	CHelpers::GetClass(&AnimClass, "/Game/Player/ABP_CPlayer");
+	CHelpers::GetClass(&AnimClass,							"/Game/Player/ABP_CPlayer");
 	GetMesh()->SetAnimInstanceClass(AnimClass);
 	
 	// Action Comp

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Actions/CDoAction.h"
+#include "Components/CActionComponent.h"
 #include "CDoAction_MagicBall.generated.h"
 
 class UCAim;
@@ -25,9 +26,14 @@ public:
 	virtual void Begin_SecondaryAction()	override;
 	virtual void End_SecondaryAction()		override;
 
+	FORCEINLINE UCAim* GetAim() { return Aim; }
+
 private:
 	UFUNCTION()
 	virtual void OnProjectileBeginOverlap(const FHitResult& InHitResult);
+
+	UFUNCTION()
+	void OnActionTypeChanged(EActionType InPrevType, EActionType InNewType);
 
 private:
 	UPROPERTY()

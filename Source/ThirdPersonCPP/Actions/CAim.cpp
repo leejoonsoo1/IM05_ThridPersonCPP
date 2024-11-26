@@ -37,7 +37,7 @@ void UCAim::Tick(float DeltaTime)
 
 void UCAim::On()
 {
-	CheckFalse(IsAvailiable());
+	CheckFalse(IsAvailable());
 	CheckTrue(bZooming);
 
 	bZooming = true;
@@ -59,7 +59,7 @@ void UCAim::On()
 
 void UCAim::Off()
 {
-	CheckFalse(IsAvailiable());
+	CheckFalse(IsAvailable());
 	CheckFalse(bZooming);
 
 	bZooming = false;
