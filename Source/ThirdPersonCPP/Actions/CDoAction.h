@@ -26,20 +26,23 @@ public:
 
 public:
 	void SetDatas(TArray<FActionData>& InDatas);
+	void SetEquipped(const bool* InEquipped);
 
-	virtual void PrimaryAction() {};
-	virtual void Begin_PrimaryAction() {};
-	virtual void End_PrimaryAction() {};
+	virtual void PrimaryAction()			{};
+	virtual void Begin_PrimaryAction()		{};
+	virtual void End_PrimaryAction()		{};
 
-	virtual void Begin_SecondaryAction() {};
-	virtual void End_SecondaryAction() {};
+	virtual void Begin_SecondaryAction()	{};
+	virtual void End_SecondaryAction()		{};
+
+	virtual void Abort()					{};
 
 public:
 	UFUNCTION()
-	virtual void OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter) {};
+	virtual void OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)	{};
 
 	UFUNCTION()
-	virtual void OnAttachmentEndOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter) {};
+	virtual void OnAttachmentEndOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)		{};
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Interp, Category = "DoAction")
