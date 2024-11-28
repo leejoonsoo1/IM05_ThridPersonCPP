@@ -56,12 +56,25 @@ public:
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE UCActionData* GetCurrentDataAsset()		{ return DataAssets[(int32)Type]; }
 
+	UFUNCTION(BlueprintCallable)
 	void SetUnarmedMode();
+
+	UFUNCTION(BlueprintCallable)
 	void SetFistMode();
+
+	UFUNCTION(BlueprintCallable)
 	void SetOneHandMode();
+
+	UFUNCTION(BlueprintCallable)
 	void SetTwoHandMode();
+
+	UFUNCTION(BlueprintCallable)
 	void SetMagicBallMode();
+
+	UFUNCTION(BlueprintCallable)
 	void SetWarpMode();
+
+	UFUNCTION(BlueprintCallable)
 	void SetWhirlWindMode();
 
 private:

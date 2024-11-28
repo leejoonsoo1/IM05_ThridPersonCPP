@@ -27,11 +27,7 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
-
-public:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-
-public:
 	virtual void SetBodyColor(FLinearColor InColor) override;
 
 private:
@@ -51,29 +47,29 @@ private:
 	void OnFinishDissolve();
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,						Category = "Components")
 	UCAttributeComponent*	AttributeComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,						Category = "Components")
 	UCStateComponent*		StateComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,						Category = "Components")
 	UCMontagesComponent*	MontagesComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly,	Category = "Components")
 	UCActionComponent*		ActionComp;	
 	
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,						Category = "Components")
 	UWidgetComponent*		NameWidgetComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,						Category = "Components")
 	UWidgetComponent*		HealthWidgetComp;
 
-	UPROPERTY(EditAnywhere, Category = "Hiited")
-	float LaunchValue;
+	UPROPERTY(EditAnywhere,								Category = "Hiited")
+	float					LaunchValue;
 
-	UPROPERTY(EditAnywhere, Category = "Dissolve")
-	UCurveFloat* DissolveCurve;
+	UPROPERTY(EditAnywhere,								Category = "Dissolve")
+	UCurveFloat*			DissolveCurve;
 
 private:
 	AController* DamageInstigator;

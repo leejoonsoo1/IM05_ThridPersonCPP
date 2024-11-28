@@ -27,9 +27,15 @@ public:
 	virtual void Abort()				override;
 
 public:
-	virtual void OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)	override;
-																																																					
+	virtual void OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)	override;																																																				
 	virtual void OnAttachmentEndOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)		override;
+
+private:
+	UFUNCTION()
+	void TickDamage();
+
+	UFUNCTION()
+	void DeActivate();
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "WhirlWind")
@@ -43,6 +49,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "WhirlWind")
 	float Radius;
+
+	UPROPERTY(VisibleInstanceOnly)
+	UParticleSystemComponent* EffectComp;
 
 private:
 	UBoxComponent* BoxComp;
