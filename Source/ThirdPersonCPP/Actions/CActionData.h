@@ -104,7 +104,7 @@ public:
 	TSubclassOf<ACDoAction> DoActionClass;
 
 	UPROPERTY(EditAnywhere, Category = "DoAction")
-	TArray<FActionData> DoActionDatas;
+	TArray<FActionData>		DoActionDatas;
 
 private:
 	ACEquipment*	Equipment;

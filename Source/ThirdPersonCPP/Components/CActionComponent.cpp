@@ -40,8 +40,12 @@ void UCActionComponent::PrimaryAction()
 void UCActionComponent::Begin_SecondaryAction()
 {
 	CheckTrue(IsUnarmedMode());
+	CLog::Log("UCActionComponent::Begin_SecondaryAction");
+
 	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetDoAction())
 	{
+		CLog::Log("UCActionComponent::Begin_SecondaryAction");
+
 		DataAssets[(int32)Type]->GetDoAction()->Begin_SecondaryAction();
 	}
 }
