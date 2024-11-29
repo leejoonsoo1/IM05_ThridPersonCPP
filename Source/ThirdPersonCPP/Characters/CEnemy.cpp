@@ -75,14 +75,15 @@ ACEnemy::ACEnemy()
 
 void ACEnemy::BeginPlay()
 {
-	Super::BeginPlay();
-
 	// Set Dynamic Material
 	BodyMaterial = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), nullptr);
 	LogoMaterial = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(1), nullptr);
 
 	GetMesh()->SetMaterial(0, BodyMaterial);
 	GetMesh()->SetMaterial(1, LogoMaterial);
+
+	// BluePrint BeingPlay
+	Super::BeginPlay();
 
 	//On StateType Changed
 	StateComp->OnStateTypeChanged.AddDynamic(this, &ACEnemy::OnStateTypeChanged);
