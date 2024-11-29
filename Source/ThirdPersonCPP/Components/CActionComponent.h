@@ -5,6 +5,7 @@
 #include "CActionComponent.generated.h"
 
 class UCActionData;
+class UCActionObject;
 
 UENUM(BlueprintType)
 enum class EActionType : uint8
@@ -33,28 +34,31 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsUnarmedMode()	const	{ return Type == EActionType::Unarmed; }
-	
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsFistMode()		const	{ return Type == EActionType::Fist; }
-
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsOneHandMode()	const	{ return Type == EActionType::OneHand; }
-
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsTwoHandMode()	const	{ return Type == EActionType::TwoHand; }
-
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsMagicBallMode()	const	{ return Type == EActionType::MagicBall; }
-
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsWarpMode()		const	{ return Type == EActionType::Warp; }
-
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE bool IsWhirlWindMode()	const	{ return Type == EActionType::WhirlWind; }
+	FORCEINLINE bool IsUnarmedMode()		 const		{ return Type == EActionType::Unarmed; }
+											 
+	UFUNCTION(BlueprintCallable)			 
+	FORCEINLINE bool IsFistMode()			 const		{ return Type == EActionType::Fist; }
+											 
+	UFUNCTION(BlueprintCallable)			 
+	FORCEINLINE bool IsOneHandMode()		 const		{ return Type == EActionType::OneHand; }
+											 
+	UFUNCTION(BlueprintCallable)			 
+	FORCEINLINE bool IsTwoHandMode()		 const		{ return Type == EActionType::TwoHand; }
+											 
+	UFUNCTION(BlueprintCallable)			 
+	FORCEINLINE bool IsMagicBallMode()		 const		{ return Type == EActionType::MagicBall; }
+											 
+	UFUNCTION(BlueprintCallable)			 
+	FORCEINLINE bool IsWarpMode()			 const		{ return Type == EActionType::Warp; }
+											 
+	UFUNCTION(BlueprintCallable)			 
+	FORCEINLINE bool IsWhirlWindMode()		 const		{ return Type == EActionType::WhirlWind; }
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE UCActionData* GetCurrentDataAsset()		{ return DataAssets[(int32)Type]; }
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE UCActionObject* GetCurrentDataObject()	{ return DataObjects[(int32)Type]; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetUnarmedMode();
@@ -89,6 +93,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DataAsset")
 	UCActionData* DataAssets[(int32)EActionType::Max];
 
+	UPROPERTY()
+	UCActionObject* DataObjects[(int32)EActionType::Max];
+
 private:
 	EActionType Type;
+
 };

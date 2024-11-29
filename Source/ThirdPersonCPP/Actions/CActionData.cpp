@@ -4,24 +4,27 @@
 #include "CEquipment.h"
 #include "CAttachment.h"
 #include "CDoAction.h"
+#include "CActionObject.h"
 
-void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
+void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCActionObject** OutActionObject)
 {
 	FTransform TM;
 
+	ACAttachment* Attachment = nullptr;
 	if (AttachmentClass)
 	{
 		Attachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClass, TM, InOwnerCharacter);
-		Attachment->SetActorLabel(MakeLabel(InOwnerCharacter, "Attachment"));
+		Attachment->SetActorLabel(MakeLabel(InOwnerCharacter,	"Attachment"));
 		Attachment->FinishSpawning(TM);
 	}
 	
+	ACEquipment* Equipment = nullptr;
 	if (EquipmentClass)
 	{
 		Equipment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACEquipment>(EquipmentClass, TM, InOwnerCharacter);
 		Equipment->SetData(EquipmentData);
 		Equipment->SetColor(EquipmentColor);
-		Equipment->SetActorLabel(MakeLabel(InOwnerCharacter, "Equipment"));
+		Equipment->SetActorLabel(MakeLabel(InOwnerCharacter,	"Equipment"));
 		Equipment->FinishSpawning(TM);
 
 		if (Attachment)
@@ -31,11 +34,12 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
 		}
 	}
 
+	ACDoAction* DoAction = nullptr;
 	if (DoActionClass)
 	{
 		DoAction = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACDoAction>(DoActionClass, TM, InOwnerCharacter);
 		DoAction->SetDatas(DoActionDatas);
-		DoAction->SetActorLabel(MakeLabel(InOwnerCharacter, "DoAction"));
+		DoAction->SetActorLabel(MakeLabel(InOwnerCharacter,		"DoAction"));
 		DoAction->FinishSpawning(TM);
 
 		if (Equipment)
@@ -49,6 +53,12 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter)
 			Attachment->OnAttachmentEndOverlap.AddDynamic(DoAction,		&ACDoAction::OnAttachmentEndOverlap);
 		}
 	}
+
+	*OutActionObject = NewObject<UCActionObject>();
+	(*OutActionObject)->Attachment		= Attachment;
+	(*OutActionObject)->Equipment		= Equipment;
+	(*OutActionObject)->DoAction		= DoAction;
+	(*OutActionObject)->EquipmentColor	= EquipmentColor;
 }
 
 FString UCActionData::MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName)
