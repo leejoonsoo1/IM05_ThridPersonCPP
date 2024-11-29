@@ -32,6 +32,9 @@ public:
 	void Begin_SecondaryAction();
 	void End_SecondaryAction();
 
+	void OffAllCollisions();
+	void DestroyAll();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsUnarmedMode()		 const		{ return Type == EActionType::Unarmed; }

@@ -229,6 +229,7 @@ void ACEnemy::Dead()
 	}
 	
 	// Off All Attachment Collision
+	ActionComp->OffAllCollisions();
 
 	//Start Disosolve Timeline
 	DissolveTimeline.PlayFromStart();
@@ -255,6 +256,8 @@ void ACEnemy::OnProgressDissolve(float Output)
 void ACEnemy::OnFinishDissolve()
 {
 	// Destroy All Spawned Equipment, Attachment, DoAction
+	ActionComp->DestroyAll();
+
 	Destroy();
 }
 
