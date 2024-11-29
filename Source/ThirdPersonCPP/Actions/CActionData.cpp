@@ -61,6 +61,8 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCActionObject** OutA
 	(*OutActionObject)->EquipmentColor	= EquipmentColor;
 }
 
+//
+
 FString UCActionData::MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName)
 {
 	FString Label;
