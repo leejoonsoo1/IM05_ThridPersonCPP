@@ -13,7 +13,7 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCActionObject** OutA
 	ACAttachment* Attachment = nullptr;
 	if (AttachmentClass)
 	{
-		Attachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClass, TM, InOwnerCharacter);
+		Attachment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACAttachment>(AttachmentClass,	TM, InOwnerCharacter);
 		Attachment->SetActorLabel(MakeLabel(InOwnerCharacter,	"Attachment"));
 		Attachment->FinishSpawning(TM);
 	}
@@ -21,7 +21,7 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCActionObject** OutA
 	ACEquipment* Equipment = nullptr;
 	if (EquipmentClass)
 	{
-		Equipment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACEquipment>(EquipmentClass, TM, InOwnerCharacter);
+		Equipment = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACEquipment>(EquipmentClass,		TM, InOwnerCharacter);
 		Equipment->SetData(EquipmentData);
 		Equipment->SetColor(EquipmentColor);
 		Equipment->SetActorLabel(MakeLabel(InOwnerCharacter,	"Equipment"));
@@ -29,15 +29,15 @@ void UCActionData::BeginPlay(ACharacter* InOwnerCharacter, UCActionObject** OutA
 
 		if (Attachment)
 		{
-			Equipment->OnEquipmentDelegate.AddDynamic(Attachment,	&ACAttachment::OnEquip);
-			Equipment->OnUnEquipmentDelegate.AddDynamic(Attachment, &ACAttachment::OnUnEquip);
+			Equipment->OnEquipmentDelegate.AddDynamic(Attachment,		&ACAttachment::OnEquip);
+			Equipment->OnUnEquipmentDelegate.AddDynamic(Attachment,		&ACAttachment::OnUnEquip);
 		}
 	}
 
 	ACDoAction* DoAction = nullptr;
 	if (DoActionClass)
 	{
-		DoAction = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACDoAction>(DoActionClass, TM, InOwnerCharacter);
+		DoAction = InOwnerCharacter->GetWorld()->SpawnActorDeferred<ACDoAction>(DoActionClass,			TM, InOwnerCharacter);
 		DoAction->SetDatas(DoActionDatas);
 		DoAction->SetActorLabel(MakeLabel(InOwnerCharacter,		"DoAction"));
 		DoAction->FinishSpawning(TM);
