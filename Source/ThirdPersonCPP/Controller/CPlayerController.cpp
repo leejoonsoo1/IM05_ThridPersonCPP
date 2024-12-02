@@ -2,6 +2,10 @@
 #include "Global.h"
 #include "Blueprint/UserWidget.h"
 
+ACPlayerController::ACPlayerController()
+{
+}
+
 void ACPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();

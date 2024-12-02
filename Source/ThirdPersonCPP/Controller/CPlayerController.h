@@ -11,8 +11,11 @@ class THIRDPERSONCPP_API ACPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	ACPlayerController();
+
 protected:
-	virtual void SetupInputComponent();
+	virtual void SetupInputComponent()		override;
 
 public:
 	UFUNCTION(BlueprintCallable, Exec)
