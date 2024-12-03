@@ -8,6 +8,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Characters/CEnemy_AI.h"
+#include "Characters/CPlayer.h"
 #include "Components/CBehaviorComponent.h"
 
 ACAIController::ACAIController()
@@ -32,9 +33,17 @@ ACAIController::ACAIController()
 
 	PerceptionComp->ConfigureSense(*Sight);	
 
-	TeamID = 1;
+	PerceptionComp->OnPerceptionUpdated.AddDynamic(this, &ACAIController::OnPerceptionUpdated);
 
-	//PerceptionComp->OnPerceptionUpdated
+	TeamID			= 1;
+	bDrawRange		= true;
+	AdjustHeight	= 64;
+	BehaviorRange	= 150;
+}
+
+float ACAIController::GetSightRadius()
+{
+	return Sight->SightRadius;
 }
 
 void ACAIController::OnPossess(APawn* InPawn)
@@ -56,6 +65,8 @@ void ACAIController::OnPossess(APawn* InPawn)
 void ACAIController::OnUnPossess()
 {
 	Super::OnUnPossess();
+
+	PerceptionComp->OnPerceptionUpdated.Clear();
 }
 
 void ACAIController::BeginPlay()
@@ -66,4 +77,33 @@ void ACAIController::BeginPlay()
 void ACAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CheckFalse(bDrawRange);
+
+	FVector Center = PossessedEnemy->GetActorLocation();
+	Center.Z += AdjustHeight;
+
+	DrawDebugCircle(GetWorld(), Center, Sight->SightRadius, 64, FColor::Green,	false, -1.f, (uint8)0U, 0.f, FVector::RightVector, FVector::ForwardVector);
+	DrawDebugCircle(GetWorld(), Center, BehaviorRange,		64, FColor::Red,	false, -1.f, (uint8)0U, 0.f, FVector::RightVector, FVector::ForwardVector);
+}
+
+void ACAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
+{
+	TArray<AActor*> PerceivedActors;
+
+	PerceptionComp->GetCurrentlyPerceivedActors(nullptr, PerceivedActors);
+
+	ACPlayer* Player = nullptr;
+
+	for (const auto& Actor : PerceivedActors)
+	{
+		Player = Cast<ACPlayer>(Actor);
+
+		if (Player)
+		{
+			break;
+		}
+	}
+
+	Blackboard->SetValueAsObject("PlayerKey", Player);
 }
