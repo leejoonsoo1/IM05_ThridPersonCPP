@@ -64,8 +64,8 @@ ACEnemy::ACEnemy()
 	// MovementComp
 	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetSprintSpeed();
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
-	//GetCharacterMovement()->bOrientRotationToMovement = true;
-	//bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	bUseControllerRotationYaw = false;
 
 	// Get Dissolve Curve Asset
 	CHelpers::GetAsset(&DissolveCurve, "/Game/Curves/Curve_Dissolve");
