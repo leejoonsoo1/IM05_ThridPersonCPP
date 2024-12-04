@@ -14,9 +14,13 @@ EBTNodeResult::Type UCBTTaskNode_Speed::ExecuteTask(UBehaviorTreeComponent& Owne
 	AAIController* AIC = Cast<AAIController>(OwnerComp.GetAIOwner());
 	CheckNullResult(AIC, EBTNodeResult::Failed);
 
-	CHelpers::GetComponent<UCAttributeComponent>(AIC->GetPawn());
+	APawn* EnemyPawn = AIC->GetPawn();
+	CheckNullResult(EnemyPawn,		EBTNodeResult::Failed);
 
+	UCAttributeComponent* AttributeComp = CHelpers::GetComponent<UCAttributeComponent>(AIC->GetPawn());
+	CheckNullResult(AttributeComp,	EBTNodeResult::Failed);
 
+	AttributeComp->SetSpeed(Type);
 
-	return EBTNodeResult::Type();
+	return EBTNodeResult::Succeeded;
 }

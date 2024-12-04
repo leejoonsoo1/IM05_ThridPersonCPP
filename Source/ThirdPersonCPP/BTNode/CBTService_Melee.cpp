@@ -10,38 +10,26 @@ UCBTService_Melee::UCBTService_Melee()
 	NodeName = "RootService";
 }
 
-void UCBTService_Melee::OnSearchStart(FBehaviorTreeSearchData& SearchData)
-{
-	Super::OnSearchStart(SearchData);
-
-	AIC = Cast<ACAIController>(SearchData.OwnerComp.GetAIOwner());
-	CheckNull(AIC);
-
-	BehaviorComp = CHelpers::GetComponent<UCBehaviorComponent>(AIC);
-	CheckNull(BehaviorComp);
-
-	EnemyPawn = AIC->GetPawn();
-	CheckNull(EnemyPawn);
-
-	StateComp = CHelpers::GetComponent<UCStateComponent>(EnemyPawn);
-}
-
 void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
+	ACAIController* AIC = Cast<ACAIController>(OwnerComp.GetAIOwner());
 	CheckNull(AIC);
+
+	UCBehaviorComponent* BehaviorComp = CHelpers::GetComponent<UCBehaviorComponent>(AIC);
 	CheckNull(BehaviorComp);
+
+	APawn* EnemyPawn = AIC->GetPawn();
 	CheckNull(EnemyPawn);
+
+	UCStateComponent* StateComp = CHelpers::GetComponent<UCStateComponent>(EnemyPawn);
 	CheckNull(StateComp);
 
 	// Hitted
 	if (StateComp->IsHittedMode())
 	{
 		BehaviorComp->SetHittedMode();
-
-		CLog::Log(__FUNCTION__, __LINE__);
-		CLog::Log("UCBTService_Melee::TickNode");
 
 		return;
 	}
@@ -77,6 +65,4 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 		return;
 	}
-
-
 }

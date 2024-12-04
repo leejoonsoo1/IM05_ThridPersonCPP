@@ -67,6 +67,10 @@ ACEnemy::ACEnemy()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
+	// Collision(Camera Channel Ignore)
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
 	// Get Dissolve Curve Asset
 	CHelpers::GetAsset(&DissolveCurve, "/Game/Curves/Curve_Dissolve");
 

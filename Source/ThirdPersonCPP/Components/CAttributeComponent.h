@@ -43,7 +43,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Health")
 	float MaxHealth;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Speed")
+	UPROPERTY(EditDefaultsOnly, Category = "Speed")
 	float WalkSpeeds[(int32)EWalkSpeedType::Max];
 
 private:
