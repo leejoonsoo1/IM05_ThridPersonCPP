@@ -27,7 +27,10 @@ public:
 	UAnimMontage* Montage;
 
 	UPROPERTY(EditAnywhere)
-	float PlayRate = 1.f;
+	float PlayRate		= 1.f;
+
+	UPROPERTY(EditAnywhere)
+	float AttackDelay	= 1.f;
 
 	UPROPERTY(EditAnywhere)
 	FName StartSection;

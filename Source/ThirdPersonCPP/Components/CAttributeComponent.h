@@ -47,6 +47,6 @@ protected:
 	float WalkSpeeds[(int32)EWalkSpeedType::Max];
 
 private:
-	float CurrentHealth;
-	bool bCanMove;
+	float	CurrentHealth;
+	bool	bCanMove;
 };

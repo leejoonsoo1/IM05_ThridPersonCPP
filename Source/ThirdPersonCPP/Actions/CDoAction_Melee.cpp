@@ -9,6 +9,12 @@ void ACDoAction_Melee::PrimaryAction()
 	Super::PrimaryAction();
 	CheckFalse(Datas.Num() > 0);
 
+	// CanAttack
+	if (!bCanAttack)
+	{
+		return;
+	}
+
 	// Combo Attack
 	if (bCanCombo)
 	{
@@ -119,4 +125,8 @@ void ACDoAction_Melee::ClearHittedCharacters()
 void ACDoAction_Melee::RestoreGlobalTimeDelation()
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+}
+
+void ACDoAction_Melee::FlipFlop()
+{
 }

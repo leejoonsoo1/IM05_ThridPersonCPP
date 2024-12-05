@@ -3,11 +3,13 @@
 #include "AIController.h"
 #include "Components/CActionComponent.h"
 #include "Components/CStateComponent.h"
+#include "Actions/CActionData.h"
 
 UCBTTaskNode_Action::UCBTTaskNode_Action()
 {
 	NodeName = "Action";
 	bNotifyTick = true;
+	AttackDelay = 2.f;
 }
 
 EBTNodeResult::Type UCBTTaskNode_Action::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -22,6 +24,8 @@ EBTNodeResult::Type UCBTTaskNode_Action::ExecuteTask(UBehaviorTreeComponent& Own
 
 	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(EnemyPawn);
 	CheckNullResult(ActionComp, EBTNodeResult::Failed);
+
+	ActionComp->PrimaryAction();
 
 	return EBTNodeResult::InProgress;
 }
@@ -38,7 +42,7 @@ void UCBTTaskNode_Action::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 	UCStateComponent* StateComp = CHelpers::GetComponent<UCStateComponent>(EnemyPawn);
 	CheckNull(StateComp);
-
+	
 	if (StateComp->IsIdleMode())
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

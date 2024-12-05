@@ -27,11 +27,15 @@ private:
 	UFUNCTION()
 	void RestoreGlobalTimeDelation();
 
+	void FlipFlop();
+
 private:
 	int32 ComboCount;
 	
 	bool bCanCombo;
 	bool bSuccessCombo;
+
+	bool bCanAttack = true;
 
 	TArray<ACharacter*> HittedCharacters;
 };

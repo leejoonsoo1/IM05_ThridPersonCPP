@@ -25,24 +25,24 @@ protected:
 
 public:
 	UFUNCTION(BlueprintPure)
-	bool IsIdleMode() { return Type == EStateType::Idle; }
+	bool IsIdleMode()		{ return Type == EStateType::Idle; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsRollMode() { return Type == EStateType::Roll; }
+	bool IsRollMode()		{ return Type == EStateType::Roll; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsBackstepMode() { return Type == EStateType::Backstep; }
+	bool IsBackstepMode()	{ return Type == EStateType::Backstep; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsEquipMode() { return Type == EStateType::Equip; }
+	bool IsEquipMode()		{ return Type == EStateType::Equip; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsActionMode() { return Type == EStateType::Action; }
+	bool IsActionMode()		{ return Type == EStateType::Action; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsHittedMode() { return Type == EStateType::Hitted; }
+	bool IsHittedMode()		{ return Type == EStateType::Hitted; }
 	UFUNCTION(BlueprintPure)
-	bool IsDeadMode() { return Type == EStateType::Dead; }
+	bool IsDeadMode()		{ return Type == EStateType::Dead; }
 
 	void SetIdleMode();
 	void SetRollMode();
