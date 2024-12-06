@@ -20,7 +20,10 @@ void UCAim::Initialize(ACharacter* InOwnerCharacter)
 	AimTimelineDelegate.BindUFunction(this, "OnProgress");
 	AimTimeline.AddInterpFloat(AimCurve, AimTimelineDelegate);
 
-	SpringArmComp->SocketOffset = FVector(0, 50, 40);
+	if (SpringArmComp)
+	{
+		SpringArmComp->SocketOffset = FVector(0, 50, 40);
+	}
 
 	APlayerController* PC = OwnerCharacter->GetController<APlayerController>();
 

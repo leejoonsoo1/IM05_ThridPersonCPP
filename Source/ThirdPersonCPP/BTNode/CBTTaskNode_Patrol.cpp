@@ -15,6 +15,17 @@ EBTNodeResult::Type UCBTTaskNode_Patrol::ExecuteTask(UBehaviorTreeComponent& Own
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	AAIController* AIC = OwnerComp.GetAIOwner();
+	CheckNullResult(AIC, EBTNodeResult::Failed);
+
+	APawn* EnemyPawn = AIC->GetPawn();
+	CheckNullResult(EnemyPawn, EBTNodeResult::Failed);
+
+	UCPatrolComponent* PatrolComp = CHelpers::GetComponent<UCPatrolComponent>(EnemyPawn);
+	CheckNullResult(PatrolComp, EBTNodeResult::Failed);
+
+	CheckFalseResult(PatrolComp->IsPathValid(), EBTNodeResult::Failed);
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -32,11 +43,9 @@ void UCBTTaskNode_Patrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	CheckNull(PatrolComp);
 
 	FVector MoveToLocation;
-	CLog::Log("UCBTTaskNode_Patrol::ExecuteTask");
-
 	PatrolComp->GetMoveTo(MoveToLocation);
 
-	EPathFollowingRequestResult::Type Result = AIC->MoveToLocation(MoveToLocation);
+	EPathFollowingRequestResult::Type Result = AIC->MoveToLocation(MoveToLocation, 50, false);
 
 	if (Result == EPathFollowingRequestResult::Failed)
 	{

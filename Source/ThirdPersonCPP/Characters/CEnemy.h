@@ -26,9 +26,9 @@ protected:
 	void BeginPlay() override;
 
 public:
-	virtual void Tick(float DeltaTime) override;
-	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	virtual void SetBodyColor(FLinearColor InColor) override;
+	virtual void	Tick(float DeltaTime) override;
+	virtual float	TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void	SetBodyColor(FLinearColor InColor) override;
 
 private:
 	UFUNCTION()
@@ -47,7 +47,7 @@ private:
 	void OnFinishDissolve();
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly,						Category = "Components")
+	UPROPERTY(BlueprintReadOnly, VisibleDefaultsOnly,	Category = "Components")
 	UCAttributeComponent*	AttributeComp;
 
 	UPROPERTY(VisibleDefaultsOnly,						Category = "Components")
