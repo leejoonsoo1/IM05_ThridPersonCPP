@@ -26,6 +26,8 @@ private:
 	bool GetCursorLocation(FVector& OutLocation);
 	void SetPreviewMeshColor(FLinearColor InColor);
 
+	bool IsOwnerPlayer();
+
 private:
 	USkeletalMeshComponent* PreviewMeshComp;
 	FVector LocationToWarp;

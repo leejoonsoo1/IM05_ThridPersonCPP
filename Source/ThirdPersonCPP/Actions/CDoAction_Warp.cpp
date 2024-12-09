@@ -1,9 +1,11 @@
 #include "CDoAction_Warp.h"
 #include "Global.h"
+#include "GameFramework/GameModeBase.h"
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/CAttributeComponent.h"
+#include "Components/CBehaviorComponent.h"
 #include "CAttachment.h"
 
 void ACDoAction_Warp::BeginPlay()
@@ -28,9 +30,9 @@ void ACDoAction_Warp::Tick(float DeltaTime)
 	PreviewMeshComp->SetVisibility(false);
 
 	CheckFalse(*bEquipped);
+	CheckFalse(IsOwnerPlayer());
 
 	FVector CursorLocationToWorld;
-		
 	if (GetCursorLocation(CursorLocationToWorld))
 	{
 		PreviewMeshComp->SetVisibility(true);
@@ -44,7 +46,25 @@ void ACDoAction_Warp::PrimaryAction()
 
 	CheckFalse(Datas.Num() > 0);
 	CheckFalse(StateComp->IsIdleMode());
-	CheckFalse(GetCursorLocation(LocationToWarp));
+	
+	if (IsOwnerPlayer())
+	{
+		CheckFalse(GetCursorLocation(LocationToWarp));
+	}
+	else
+	{
+		AController* AIC = OwnerCharacter->GetController();
+		
+		if (AIC)
+		{
+			UCBehaviorComponent* BehaviorComp = CHelpers::GetComponent<UCBehaviorComponent>(AIC);
+
+			if (BehaviorComp)
+			{
+				LocationToWarp = BehaviorComp->GetLocationValue();
+			}
+		}
+	}
 
 	StateComp->SetActionMode();
 	OwnerCharacter->PlayAnimMontage(Datas[0].Montage, Datas[0].PlayRate, Datas[0].StartSection);
@@ -86,13 +106,13 @@ void ACDoAction_Warp::End_PrimaryAction()
 bool ACDoAction_Warp::GetCursorLocation(FVector& OutLocation)
 {
 	APlayerController* PC = OwnerCharacter->GetController<APlayerController>();
-	
+	//CheckNull(PC);	
+
 	// Use C++ and BluePrint
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	ObjectTypes.Add(ObjectTypeQuery1);
 	
 	FHitResult Hit;
-		
 	if (PC->GetHitResultUnderCursorForObjects(ObjectTypes, true, Hit))
 	{
 		OutLocation = Hit.Location;
@@ -107,4 +127,9 @@ void ACDoAction_Warp::SetPreviewMeshColor(FLinearColor InColor)
 {
 	FVector Emissive = FVector(InColor.R, InColor.G, InColor.B);
 	PreviewMeshComp->SetVectorParameterValueOnMaterials("Emissive", Emissive);
+}
+
+bool ACDoAction_Warp::IsOwnerPlayer()
+{
+	return OwnerCharacter->GetClass() == GetWorld()->GetAuthGameMode()->DefaultPawnClass;
 }
