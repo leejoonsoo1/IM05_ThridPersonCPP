@@ -34,6 +34,8 @@ protected:
 public:	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 private:
 	void OnMoveForward(float Axis);
 	void OnMoveRight(float Axis);
@@ -62,6 +64,11 @@ private:
 
 	void RollingRotation();
 
+	void Hitted()	override;
+	void Dead()		override;
+
+	UFUNCTION()
+	void End_Dead() override;
 
 public:
 	void End_Roll();
@@ -100,4 +107,7 @@ protected:
 private:
 	UMaterialInstanceDynamic* BodyMaterial;
 	UMaterialInstanceDynamic* LogoMaterial;
+
+	AController* DamageInstigator;
+	float DamageValue;
 };

@@ -35,6 +35,8 @@ public:
 	void OffAllCollisions();
 	void DestroyAll();
 
+	void Abort();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE bool IsUnarmedMode()		 const		{ return Type == EActionType::Unarmed; }

@@ -43,10 +43,14 @@ void UCAttributeComponent::IncreaseHealth(float InAmount)
 {
 	CurrentHealth += InAmount;
 	CurrentHealth = FMath::Clamp(CurrentHealth, 0.f, MaxHealth);
+
+	OnHealthChanged.Broadcast();
 }
 
 void UCAttributeComponent::DecreaseHealth(float InAmount)
 {
 	CurrentHealth -= InAmount;
 	CurrentHealth = FMath::Clamp(CurrentHealth, 0.f, MaxHealth);
+
+	OnHealthChanged.Broadcast();
 }

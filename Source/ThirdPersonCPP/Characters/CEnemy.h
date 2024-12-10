@@ -34,8 +34,8 @@ private:
 	UFUNCTION()
 	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
-	void Hitted();
-	void Dead();
+	void Hitted()	override;
+	void Dead()		override;
 
 	UFUNCTION()
 	void ResotreBodyColor();
@@ -70,6 +70,9 @@ protected:
 
 	UPROPERTY(EditAnywhere,								Category = "Dissolve")
 	UCurveFloat*			DissolveCurve;
+
+	UPROPERTY(EditAnywhere,								Category = "Debug")
+	bool					bVisibleNameWidget;
 
 private:
 	AController* DamageInstigator;

@@ -4,6 +4,8 @@
 #include "Components/ActorComponent.h"
 #include "CAttributeComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHealthChanged);
+
 UENUM(BlueprintType)
 enum class EWalkSpeedType : uint8
 {
@@ -41,6 +43,10 @@ public:
 
 	void IncreaseHealth(float InAmount);
 	void DecreaseHealth(float InAmount);
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FHealthChanged OnHealthChanged;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Health")

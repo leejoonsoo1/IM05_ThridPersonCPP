@@ -96,6 +96,23 @@ void UCActionComponent::DestroyAll()
 	}
 }
 
+void UCActionComponent::Abort()
+{
+	CheckNull(DataObjects[(int32)Type]);
+	CheckTrue(IsUnarmedMode());
+
+	if (DataObjects[(int32)Type]->GetEquipment())
+	{
+		DataObjects[(int32)Type]->GetEquipment()->Begin_Equip();
+		DataObjects[(int32)Type]->GetEquipment()->End_Equip();
+	}
+
+	if (DataObjects[(int32)Type]->GetDoAction())
+	{
+		DataObjects[(int32)Type]->GetDoAction()->Abort();
+	}
+}
+
 void UCActionComponent::SetUnarmedMode()
 {
 	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetEquipment())
