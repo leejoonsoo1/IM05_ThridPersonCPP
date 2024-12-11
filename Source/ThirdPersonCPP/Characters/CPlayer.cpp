@@ -3,8 +3,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/PostProcessComponent.h"
 #include "Components/CAttributeComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
@@ -54,6 +56,11 @@ ACPlayer::ACPlayer()
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
+
+	// PostProcess Comp
+	CHelpers::CreateSceneComponent<UPostProcessComponent>(this, &PostProcessComp, "PostProcessComp", GetRootComponent());
+	UMaterialInstanceConstant* Mat;
+	PostProcessComp->AddOrUpdateBlendable(Mat);
 
 	// Property Settings
 	TeamID = 0;
@@ -307,7 +314,6 @@ void ACPlayer::Hitted()
 {
 	MontagesComp->PlayHitted();
 	AttributeComp->SetStop();
-	
 }
 
 void ACPlayer::Dead()
@@ -317,6 +323,7 @@ void ACPlayer::Dead()
 	GetMesh()->SetCollisionProfileName("Ragdoll");
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->DisableMovement();
+	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
 
 	//Add Impulse
 	FVector Start = GetActorLocation();
@@ -350,6 +357,7 @@ void ACPlayer::End_Roll()
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 	}
 
+	//if (!StateComp->IsDeadMode())
 	StateComp->SetIdleMode();
 }
 
@@ -364,7 +372,7 @@ void ACPlayer::End_Backstep()
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
 
-
+	//if (!StateComp->IsDeadMode())
 	StateComp->SetIdleMode();
 }
 

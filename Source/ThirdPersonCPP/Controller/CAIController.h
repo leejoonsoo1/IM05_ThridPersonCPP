@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Components/CStateComponent.h"
 #include "CAIController.generated.h"
 
 class ACEnemy_AI;
@@ -33,6 +34,9 @@ public:
 private:
 	UFUNCTION()
 	void OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors);
+
+	UFUNCTION()
+	void RemovePlayerKey(EStateType InPrevType, EStateType InNewType);
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")

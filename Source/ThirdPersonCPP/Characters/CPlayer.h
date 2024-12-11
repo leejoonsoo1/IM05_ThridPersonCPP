@@ -15,6 +15,7 @@ class UCStateComponent;
 class UCMontagesComponent;
 class UCActionComponent;
 class UMaterialInstanceDynamic;
+class UPostProcessComponent;
 
 UCLASS()
 class THIRDPERSONCPP_API ACPlayer : public ACharacter, public ICCharacterInterface, public IGenericTeamAgentInterface
@@ -80,28 +81,31 @@ private:
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	USpringArmComponent* SpringArmComp;
+	USpringArmComponent*	SpringArmComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UCameraComponent* CameraComp;
+	UCameraComponent*		CameraComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UCAttributeComponent* AttributeComp;
+	UCAttributeComponent*	AttributeComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UCOptionComponent* OptionComp;
+	UCOptionComponent*		OptionComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UCStateComponent* StateComp;
+	UCStateComponent*		StateComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UCMontagesComponent* MontagesComp;
+	UCMontagesComponent*	MontagesComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UCActionComponent* ActionComp;
+	UCActionComponent*		ActionComp;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPostProcessComponent*	PostProcessComp;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Team")
+	UPROPERTY(EditDefaultsOnly,		Category = "Team")
 	uint8 TeamID;
 
 private:
