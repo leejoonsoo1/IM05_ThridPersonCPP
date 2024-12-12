@@ -106,6 +106,8 @@ void ACDoAction_WhirlWind::End_PrimaryAction()
 void ACDoAction_WhirlWind::Abort()
 {
 	Super::Abort();
+
+	DeActivate();
 }
 
 void ACDoAction_WhirlWind::OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter)
@@ -168,5 +170,4 @@ void ACDoAction_WhirlWind::DeActivate()
 	}
 
 	UKismetSystemLibrary::K2_ClearTimer(this, "TickDamage");
-	
 }

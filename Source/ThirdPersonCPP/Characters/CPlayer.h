@@ -16,6 +16,7 @@ class UCMontagesComponent;
 class UCActionComponent;
 class UMaterialInstanceDynamic;
 class UPostProcessComponent;
+class UMaterialInstanceConstant;
 
 UCLASS()
 class THIRDPERSONCPP_API ACPlayer : public ACharacter, public ICCharacterInterface, public IGenericTeamAgentInterface
@@ -80,33 +81,39 @@ private:
 	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	USpringArmComponent*	SpringArmComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	UCameraComponent*		CameraComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	UCAttributeComponent*	AttributeComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	UCOptionComponent*		OptionComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	UCStateComponent*		StateComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	UCMontagesComponent*	MontagesComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	UCActionComponent*		ActionComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	UPostProcessComponent*	PostProcessComp;
 
 protected:
 	UPROPERTY(EditDefaultsOnly,		Category = "Team")
 	uint8 TeamID;
+
+	UPROPERTY(EditDefaultsOnly,		Category = "Dead")
+	UMaterialInstanceConstant* PostProcessMaterial;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
+	TSubclassOf<UUserWidget> GameOverWidgetClass;
 
 private:
 	UMaterialInstanceDynamic* BodyMaterial;

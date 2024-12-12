@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/PostProcessComponent.h"
 #include "Components/CAttributeComponent.h"
@@ -59,8 +60,7 @@ ACPlayer::ACPlayer()
 
 	// PostProcess Comp
 	CHelpers::CreateSceneComponent<UPostProcessComponent>(this, &PostProcessComp, "PostProcessComp", GetRootComponent());
-	UMaterialInstanceConstant* Mat;
-	PostProcessComp->AddOrUpdateBlendable(Mat);
+	PostProcessComp->bEnabled = false;
 
 	// Property Settings
 	TeamID = 0;
@@ -339,12 +339,26 @@ void ACPlayer::Dead()
 	// Disable Input
 	DisableInput(GetController<APlayerController>());
 
+	// PostProcess
+	PostProcessComp->bEnabled = true;
+
+
 	// End_Dead Timer
 	UKismetSystemLibrary::K2_SetTimer(this, "End_Dead", 5.f, false);
 }
 
 void ACPlayer::End_Dead()
 {
+	ensure(GameOverWidgetClass);
+
+	APlayerController* PC = GetController<APlayerController>();
+	CheckNull(PC);
+
+	UUserWidget* GameOverWidget = CreateWidget<UUserWidget>(PC, GameOverWidgetClass);
+	GameOverWidget->AddToViewport();
+
+	PC->bShowMouseCursor = true;
+	PC->SetInputMode(FInputModeGameAndUI());
 }
 
 void ACPlayer::End_Roll()
