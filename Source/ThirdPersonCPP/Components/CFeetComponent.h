@@ -27,13 +27,13 @@ public:
 	FRotator RightRotation;
 };
 
-UCLASS()
-class THIRDPERSONCPP_API ACFeetComponent : public AActor
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+class THIRDPERSONCPP_API UCFeetComponent : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:	
-	ACFeetComponent();
+	UCFeetComponent();
 
 protected:
 	virtual void BeginPlay() override;
