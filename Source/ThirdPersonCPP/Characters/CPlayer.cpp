@@ -12,6 +12,7 @@
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
+#include "Components/CFeetComponent.h"
 #include "Actions/CActionData.h"
 
 ACPlayer::ACPlayer()
@@ -51,6 +52,9 @@ ACPlayer::ACPlayer()
 
 	// State Comp
 	CHelpers::CreateActorComponent(this, &StateComp,		"StateComp");
+	
+	// Feet Comp
+	CHelpers::CreateActorComponent(this, &FeetComp,			"FeetComp");
 
 	// MovementComp
 	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetSprintSpeed();
