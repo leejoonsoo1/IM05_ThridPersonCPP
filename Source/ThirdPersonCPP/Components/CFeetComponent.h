@@ -45,7 +45,7 @@ public:
 	FORCEINLINE const FFeetData& GetData() { return Data; }
 
 private:
-	void Trace(FName InSocket, float& OutDistance);
+	void Trace(FName InSocket, float& OutDistance, FRotator& OutRotation);
 
 private:
 	UPROPERTY(EditInstanceOnly, Category = "IK")
@@ -59,6 +59,9 @@ private:
 
 	UPROPERTY(EditInstanceOnly, Category = "IK")
 	float FootHeight;
+
+	UPROPERTY(EditInstanceOnly, Category = "IK")
+	float InterpSpeed;
 
 	UPROPERTY(EditInstanceOnly, Category = "IK")
 	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType;
