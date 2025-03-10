@@ -2,17 +2,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CChest.generated.h"
-
-class UMaterialInstanceDynamic;
+#include "CDoor.generated.h"
 
 UCLASS()
-class THIRDPERSONCPP_API ACChest : public AActor
+class THIRDPERSONCPP_API ACDoor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	ACChest();
+	ACDoor();
 
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
@@ -24,23 +22,19 @@ public:
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	USceneComponent*		RootComp;
+	USceneComponent* RootComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UStaticMeshComponent*	TopMeshComp;
+	UStaticMeshComponent* FrameMeshComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UStaticMeshComponent*	BottomMeshComp;
+	UStaticMeshComponent* DoorMeshComp;
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "Collisions")
-	class UBoxComponent*	BoxCollision;
-
-private:
 	UPROPERTY(EditInstanceOnly, Category = "SysmbolColor")
 	FLinearColor SymbolColor;
 
 private:
-	UMaterialInstanceDynamic* DynamicMaterial;
+	class UMaterialInstanceDynamic* DynamicMaterial;
 
 private:
 	bool Toggle;

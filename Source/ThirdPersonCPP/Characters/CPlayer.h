@@ -5,6 +5,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "Components/CStateComponent.h"
 #include "Interfaces/CCharacterInterface.h"
+#include "Containers/Map.h"
 #include "CPlayer.generated.h"
 
 class USpringArmComponent;
@@ -15,6 +16,7 @@ class UCStateComponent;
 class UCMontagesComponent;
 class UCActionComponent;
 class UMaterialInstanceDynamic;
+class UCWidget;
 class UPostProcessComponent;
 class UMaterialInstanceConstant;
 class UCFeetComponent;
@@ -57,6 +59,7 @@ private:
 	void OnWarp();
 	void OnWhirlWind();
 
+	void Interact();
 	void OnPrimaryAction();
 	void OnBeginSecondaryAction();
 	void OnEndSecondaryAction();
@@ -78,10 +81,19 @@ public:
 	void End_Backstep();
 
 private:
+	void RootKey(FLinearColor FindKey);
+
+private:
 	UFUNCTION()
 	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
 protected:
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCActionComponent*		ActionComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<UCWidget>	KeyWidgetClass;
+
 	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
 	USpringArmComponent*	SpringArmComp;
 
@@ -118,10 +130,16 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly,		Category = "Dead")
 	TSubclassOf<UUserWidget> GameOverWidgetClass;
-
+  
 private:
 	UMaterialInstanceDynamic* BodyMaterial;
 	UMaterialInstanceDynamic* LogoMaterial;
+
+public:
+	class UCWidget* KeyWidget;
+
+private:
+	TMap<FLinearColor, bool> Key;
 
 	AController* DamageInstigator;
 	float DamageValue;

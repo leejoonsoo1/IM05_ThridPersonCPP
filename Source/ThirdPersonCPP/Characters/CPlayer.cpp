@@ -12,8 +12,14 @@
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Components/CFeetComponent.h"
 #include "Actions/CActionData.h"
+#include "Assignment/CChest.h"
+#include "Assignment/CDoor.h"
+#include "Blueprint/UserWidget.h"
+#include "Assignment/CWidget.h"
+#include "Math\UnrealMathUtility.h"
 
 ACPlayer::ACPlayer()
 {
@@ -62,6 +68,8 @@ ACPlayer::ACPlayer()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
+	CHelpers::GetClass(&KeyWidgetClass, "/Game/UI/WB_HasKeys");
+
 	// PostProcess Comp
 	CHelpers::CreateSceneComponent<UPostProcessComponent>(this, &PostProcessComp, "PostProcessComp", GetRootComponent());
 	PostProcessComp->bEnabled = false;
@@ -73,6 +81,13 @@ ACPlayer::ACPlayer()
 void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (KeyWidgetClass)
+	{
+		KeyWidget = CreateWidget<UCWidget>(GetController<APlayerController>(), KeyWidgetClass);
+		KeyWidget->AddToViewport();
+		KeyWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 
 	// Set Dynamic Material
 	BodyMaterial = UMaterialInstanceDynamic::Create(GetMesh()->GetMaterial(0), nullptr);
@@ -108,7 +123,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Zoom",									this, &ACPlayer::OnZoom);
 
 	PlayerInputComponent->BindAction("Evade",				IE_Pressed,		this, &ACPlayer::OnEvade);
-	
+
+  PlayerInputComponent->BindAction("Interact",	IE_Pressed,		this, &ACPlayer::Interact);
 	PlayerInputComponent->BindAction("Walk",				IE_Pressed,		this, &ACPlayer::OnWalk);
 	PlayerInputComponent->BindAction("Walk",				IE_Released,	this, &ACPlayer::OffWalk);
 
@@ -257,6 +273,68 @@ void ACPlayer::OnWhirlWind()
 	ActionComp->SetWhirlWindMode();
 }
 
+void ACPlayer::Interact()
+{
+	FHitResult HitResult;
+	FLinearColor KeyColor;
+	FCollisionQueryParams Params;
+	FVector Start	= GetActorLocation();
+	FVector End		= Start + GetActorForwardVector() * 300;
+
+	Params.AddIgnoredActor(this);;
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_WorldDynamic, Params);
+	
+	if (bHit)
+	{
+		AActor* HitActor = HitResult.GetActor();
+		CheckNull(HitActor);
+
+		if (HitActor->IsA(ACChest::StaticClass()))
+		{
+			ACChest* Chest = Cast<ACChest>(HitActor);
+			CheckNull(Chest);
+			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
+
+			KeyColor = Chest->GetSymbolColor();
+
+			KeyColor.R = FMath::Clamp(KeyColor.R, 0.f, 1.f);
+			KeyColor.G = FMath::Clamp(KeyColor.G, 0.f, 1.f);
+			KeyColor.B = FMath::Clamp(KeyColor.B, 0.f, 1.f);
+
+			KeyWidget->SetKey(KeyColor);
+			RootKey(KeyColor);
+			Chest->Interact();
+		}
+		else if (HitActor->IsA(ACDoor::StaticClass()))
+		{
+			ACDoor* Door = Cast<ACDoor>(HitActor);
+			CheckNull(Door);
+			DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 1.0f);
+
+			FLinearColor DoorColor = Door->GetSymbolColor();
+
+			DoorColor.R = FMath::Clamp(DoorColor.R, 0.f, 1.f);
+			DoorColor.G	= FMath::Clamp(DoorColor.G, 0.f, 1.f);
+			DoorColor.B	= FMath::Clamp(DoorColor.B, 0.f, 1.f);
+
+			if (Key.Find(DoorColor))
+			{
+				Door->Interact();
+			}
+			else
+			{
+				FVector Location	= HitResult.ImpactPoint;
+				FString DebugText	= TEXT("You don't have a key");
+				FColor TextColor	= FColor::White;
+				float Duration		= 3.f;
+				bool bDrawShadow		= true;
+
+				DrawDebugString(GetWorld(), Location, DebugText, nullptr, TextColor, Duration, bDrawShadow);
+			}
+		}
+	}
+
 void ACPlayer::OnPrimaryAction()
 {
 	CLog::Log("ACPlayer::OnPrimaryAction");
@@ -381,7 +459,7 @@ void ACPlayer::End_Roll()
 
 void ACPlayer::End_Backstep()
 {
-	// if (ÇöÀç ³»°¡ ÀåÂøÇÑ DA->bUseControl == 1, 0)
+	// if (Ã‡Ã¶Ã€Ã§ Â³Â»Â°Â¡ Ã€Ã¥Ã‚Ã¸Ã‡Ã‘ DA->bUseControl == 1, 0)
 	UCActionData* CurrentDA = ActionComp->GetCurrentDataAsset();
 
 	if (CurrentDA && !CurrentDA->EquipmentData.bUseControlRotation)
@@ -391,7 +469,13 @@ void ACPlayer::End_Backstep()
 	}
 
 	//if (!StateComp->IsDeadMode())
+
 	StateComp->SetIdleMode();
+}
+
+void ACPlayer::RootKey(FLinearColor FindKey)
+{
+	Key.Add(FindKey, true);
 }
 
 void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
