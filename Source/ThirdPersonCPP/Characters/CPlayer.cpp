@@ -3,12 +3,17 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Materials/MaterialInstanceConstant.h"
 #include "Materials/MaterialInstanceDynamic.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/PostProcessComponent.h"
 #include "Components/CAttributeComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CMontagesComponent.h"
 #include "Components/CActionComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Components/CFeetComponent.h"
 #include "Actions/CActionData.h"
 #include "Assignment/CChest.h"
 #include "Assignment/CDoor.h"
@@ -30,13 +35,13 @@ ACPlayer::ACPlayer()
 
 	// MeshComp
 	USkeletalMesh* MeshAsset;
-	CHelpers::GetAsset(&MeshAsset, "/Game/Character/Mesh/SK_Mannequin");
+	CHelpers::GetAsset(&MeshAsset,							"/Game/Character/Mesh/SK_Mannequin");
 	GetMesh()->SetSkeletalMesh(MeshAsset);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
 	TSubclassOf<UAnimInstance> AnimClass;
-	CHelpers::GetClass(&AnimClass, "/Game/Player/ABP_CPlayer");
+	CHelpers::GetClass(&AnimClass,							"/Game/Player/ABP_CPlayer");
 	GetMesh()->SetAnimInstanceClass(AnimClass);
 	
 	// Action Comp
@@ -53,6 +58,9 @@ ACPlayer::ACPlayer()
 
 	// State Comp
 	CHelpers::CreateActorComponent(this, &StateComp,		"StateComp");
+	
+	// Feet Comp
+	CHelpers::CreateActorComponent(this, &FeetComp,			"FeetComp");
 
 	// MovementComp
 	GetCharacterMovement()->MaxWalkSpeed = AttributeComp->GetSprintSpeed();
@@ -60,8 +68,14 @@ ACPlayer::ACPlayer()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	bUseControllerRotationYaw = false;
 
-	// User Widget
 	CHelpers::GetClass(&KeyWidgetClass, "/Game/UI/WB_HasKeys");
+
+	// PostProcess Comp
+	CHelpers::CreateSceneComponent<UPostProcessComponent>(this, &PostProcessComp, "PostProcessComp", GetRootComponent());
+	PostProcessComp->bEnabled = false;
+
+	// Property Settings
+	TeamID = 0;
 }
 
 void ACPlayer::BeginPlay()
@@ -93,29 +107,60 @@ void ACPlayer::SetBodyColor(FLinearColor InColor)
 	LogoMaterial->SetVectorParameterValue("BodyColor", InColor);
 }
 
+FGenericTeamId ACPlayer::GetGenericTeamId() const
+{
+	return FGenericTeamId(TeamID);
+}
+
 void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("MoveForward",					this, &ACPlayer::OnMoveForward);
-	PlayerInputComponent->BindAxis("MoveRight",						this, &ACPlayer::OnMoveRight);
-	PlayerInputComponent->BindAxis("Turn",							this, &ACPlayer::OnTurn);
-	PlayerInputComponent->BindAxis("LookUp",						this, &ACPlayer::OnLookUp);
-	PlayerInputComponent->BindAxis("Zoom",							this, &ACPlayer::OnZoom);
+	PlayerInputComponent->BindAxis("MoveForward",							this, &ACPlayer::OnMoveForward);
+	PlayerInputComponent->BindAxis("MoveRight",								this, &ACPlayer::OnMoveRight);
+	PlayerInputComponent->BindAxis("Turn",									this, &ACPlayer::OnTurn);
+	PlayerInputComponent->BindAxis("LookUp",								this, &ACPlayer::OnLookUp);
+	PlayerInputComponent->BindAxis("Zoom",									this, &ACPlayer::OnZoom);
 
-	PlayerInputComponent->BindAction("Evade",		IE_Pressed,		this, &ACPlayer::OnEvade);
-	
-	PlayerInputComponent->BindAction("Walk",		IE_Pressed,		this, &ACPlayer::OnWalk);
-	PlayerInputComponent->BindAction("Walk",		IE_Released,	this, &ACPlayer::OffWalk);
+	PlayerInputComponent->BindAction("Evade",				IE_Pressed,		this, &ACPlayer::OnEvade);
 
-	PlayerInputComponent->BindAction("Fist",		IE_Pressed,		this, &ACPlayer::OnFist);
-	PlayerInputComponent->BindAction("OneHand",		IE_Released,	this, &ACPlayer::OnOneHand);
-	PlayerInputComponent->BindAction("TwoHand",		IE_Pressed,		this, &ACPlayer::OnTwoHand);
-	PlayerInputComponent->BindAction("MagicBall",	IE_Released,	this, &ACPlayer::OnMagicBall);
-	PlayerInputComponent->BindAction("Warp",		IE_Pressed,		this, &ACPlayer::OnWarp);
-	PlayerInputComponent->BindAction("WhirlWind",	IE_Released,	this, &ACPlayer::OnWhirlWind);
+  PlayerInputComponent->BindAction("Interact",	IE_Pressed,		this, &ACPlayer::Interact);
+	PlayerInputComponent->BindAction("Walk",				IE_Pressed,		this, &ACPlayer::OnWalk);
+	PlayerInputComponent->BindAction("Walk",				IE_Released,	this, &ACPlayer::OffWalk);
 
-	PlayerInputComponent->BindAction("Interact",	IE_Pressed,		this, &ACPlayer::Interact);
+	PlayerInputComponent->BindAction("Fist",				IE_Pressed,		this, &ACPlayer::OnFist);
+	PlayerInputComponent->BindAction("OneHand",				IE_Released,	this, &ACPlayer::OnOneHand);
+	PlayerInputComponent->BindAction("TwoHand",				IE_Pressed,		this, &ACPlayer::OnTwoHand);
+	PlayerInputComponent->BindAction("MagicBall",			IE_Released,	this, &ACPlayer::OnMagicBall);
+	PlayerInputComponent->BindAction("Warp",				IE_Pressed,		this, &ACPlayer::OnWarp);
+	PlayerInputComponent->BindAction("WhirlWind",			IE_Released,	this, &ACPlayer::OnWhirlWind);
+
+	PlayerInputComponent->BindAction("PrimaryAction",		IE_Pressed,		this, &ACPlayer::OnPrimaryAction);
+	PlayerInputComponent->BindAction("SecondaryAction",		IE_Pressed,		this, &ACPlayer::OnBeginSecondaryAction);
+	PlayerInputComponent->BindAction("SecondaryAction",		IE_Released,	this, &ACPlayer::OnEndSecondaryAction);
+}
+
+float ACPlayer::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	DamageInstigator = EventInstigator;
+	DamageValue = ActualDamage;
+
+	ActionComp->Abort();
+
+	AttributeComp->DecreaseHealth(Damage);
+
+	if (AttributeComp->GetCurrentHealth() <= 0.f)
+	{
+		StateComp->SetDeadMode();
+
+		return ActualDamage;
+	}
+
+	StateComp->SetHittedMode();
+
+	return ActualDamage;
 }
 
 void ACPlayer::OnMoveForward(float Axis)
@@ -289,6 +334,21 @@ void ACPlayer::Interact()
 			}
 		}
 	}
+
+void ACPlayer::OnPrimaryAction()
+{
+	CLog::Log("ACPlayer::OnPrimaryAction");
+	ActionComp->PrimaryAction();
+}
+
+void ACPlayer::OnBeginSecondaryAction()
+{
+	ActionComp->Begin_SecondaryAction();
+}
+
+void ACPlayer::OnEndSecondaryAction()
+{
+	ActionComp->End_SecondaryAction();
 }
 
 void ACPlayer::Begin_Roll()
@@ -332,6 +392,57 @@ void ACPlayer::RollingRotation()
 	SetActorRotation(Rotation);
 }
 
+void ACPlayer::Hitted()
+{
+	MontagesComp->PlayHitted();
+	AttributeComp->SetStop();
+}
+
+void ACPlayer::Dead()
+{
+	//Ragdoll
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetCollisionProfileName("Ragdoll");
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->DisableMovement();
+	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
+
+	//Add Impulse
+	FVector Start = GetActorLocation();
+	FVector Target = DamageInstigator->GetPawn()->GetActorLocation();
+	FVector Direction = Start - Target;
+	Direction.Normalize();
+
+	GetMesh()->AddImpulseAtLocation(Direction * DamageValue * 3000.f, Start);
+
+	//Off All Collisions
+	ActionComp->OffAllCollisions();
+
+	// Disable Input
+	DisableInput(GetController<APlayerController>());
+
+	// PostProcess
+	PostProcessComp->bEnabled = true;
+
+
+	// End_Dead Timer
+	UKismetSystemLibrary::K2_SetTimer(this, "End_Dead", 5.f, false);
+}
+
+void ACPlayer::End_Dead()
+{
+	ensure(GameOverWidgetClass);
+
+	APlayerController* PC = GetController<APlayerController>();
+	CheckNull(PC);
+
+	UUserWidget* GameOverWidget = CreateWidget<UUserWidget>(PC, GameOverWidgetClass);
+	GameOverWidget->AddToViewport();
+
+	PC->bShowMouseCursor = true;
+	PC->SetInputMode(FInputModeGameAndUI());
+}
+
 void ACPlayer::End_Roll()
 {
 	UCActionData* CurrentDA = ActionComp->GetCurrentDataAsset();
@@ -342,12 +453,13 @@ void ACPlayer::End_Roll()
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 	}
 
+	//if (!StateComp->IsDeadMode())
 	StateComp->SetIdleMode();
 }
 
 void ACPlayer::End_Backstep()
 {
-	// if (ÇöÀç ³»°¡ ÀåÂøÇÑ DA->bUseControl == 1, 0)
+	// if (Ã‡Ã¶Ã€Ã§ Â³Â»Â°Â¡ Ã€Ã¥Ã‚Ã¸Ã‡Ã‘ DA->bUseControl == 1, 0)
 	UCActionData* CurrentDA = ActionComp->GetCurrentDataAsset();
 
 	if (CurrentDA && !CurrentDA->EquipmentData.bUseControlRotation)
@@ -355,6 +467,8 @@ void ACPlayer::End_Backstep()
 		bUseControllerRotationYaw = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 	}
+
+	//if (!StateComp->IsDeadMode())
 
 	StateComp->SetIdleMode();
 }
@@ -377,6 +491,18 @@ void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 		case EStateType::Backstep:
 		{
 			Begin_Backstep();
+		}
+		break;
+
+		case EStateType::Hitted:
+		{
+			Hitted();
+		}
+		break;
+
+		case EStateType::Dead:
+		{
+			Dead();
 		}
 		break;
 	}

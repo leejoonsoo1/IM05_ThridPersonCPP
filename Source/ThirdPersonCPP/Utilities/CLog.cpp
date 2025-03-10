@@ -41,6 +41,7 @@ void CLog::Log(float Value)
 	UE_LOG(GameProject, Error, TEXT("%f"), Value);
 }
 
+
 void CLog::Log(const FString& Value)
 {
 	UE_LOG(GameProject, Error, TEXT("%s"), *Value);

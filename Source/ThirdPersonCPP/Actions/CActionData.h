@@ -8,7 +8,15 @@ class UAnimMontage;
 class ACharaacter;
 class ACEquipment;
 class ACAttachment;
+class ACDoAction;
+class UParticleSystem;
+class UCameraShake;
+class ACProjectile;
+class UCActionObject;
 
+//-----------------------------------------------------------------------------
+// Struct FEquipmentData
+//-----------------------------------------------------------------------------
 USTRUCT(BlueprintType)
 struct FEquipmentData
 {
@@ -19,7 +27,10 @@ public:
 	UAnimMontage* Montage;
 
 	UPROPERTY(EditAnywhere)
-	float PlayRate = 1.f;
+	float PlayRate		= 1.f;
+
+	UPROPERTY(EditAnywhere)
+	float AttackDelay	= 1.f;
 
 	UPROPERTY(EditAnywhere)
 	FName StartSection;
@@ -32,15 +43,45 @@ public:
 	bool bUseControlRotation = true;
 
 };
+
+//-----------------------------------------------------------------------------
+// Struct FActionData
+//-----------------------------------------------------------------------------
+USTRUCT(BlueprintType)
+struct FActionData : public FEquipmentData
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere)
+	float Damage = 5.f;
+
+	UPROPERTY(EditAnywhere)
+	float HitStop;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* Effect;
+
+	UPROPERTY(EditAnywhere)
+	FTransform EffectTransform;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraShake> ShakeClass;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ACProjectile> ProjectileClass;
+};
+
+//-----------------------------------------------------------------------------
+// Class UCActionData
+//-----------------------------------------------------------------------------
 UCLASS()
 class THIRDPERSONCPP_API UCActionData : public UDataAsset
 {
 	GENERATED_BODY()
 	
 public:
-	void BeginPlay(ACharacter* InOwnerChacater);
-
-	FORCEINLINE ACEquipment* GetEquipment() { return Equipment; }
+	void BeginPlay(ACharacter* InOwnerChacater, UCActionObject** OutActionObject);
 
 private:
 	FString MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName);
@@ -52,14 +93,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	FLinearColor EquipmentColor;
 
-	UPROPERTY(EditAnywhere, Category = "Attachment")
-	TSubclassOf<ACAttachment> AttachmentClass;
-
-	// Equipment
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	FEquipmentData EquipmentData;
 
-private:
-	ACEquipment* Equipment;
-	ACAttachment* Attachment;
+	UPROPERTY(EditAnywhere, Category = "Attachment")
+	TSubclassOf<ACAttachment> AttachmentClass;
+
+	UPROPERTY(EditAnywhere, Category = "DoAction")
+	TSubclassOf<ACDoAction> DoActionClass;
+
+	UPROPERTY(EditAnywhere, Category = "DoAction")
+	TArray<FActionData>		DoActionDatas;
 };

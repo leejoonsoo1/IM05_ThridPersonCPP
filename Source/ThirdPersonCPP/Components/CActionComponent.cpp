@@ -3,7 +3,9 @@
 #include "GameFramework/Character.h"
 #include "Actions/CActionData.h"
 #include "Actions/CEquipment.h"
-
+#include "Actions/CAttachment.h"
+#include "Actions/CDoAction.h"
+#include "Actions/CActionObject.h"
 
 UCActionComponent::UCActionComponent()
 {
@@ -20,21 +22,107 @@ void UCActionComponent::BeginPlay()
 	{
 		if (DataAssets[i] && OwnerCharacter)
 		{
-			DataAssets[i]->BeginPlay(OwnerCharacter);
+			DataAssets[i]->BeginPlay(OwnerCharacter, &DataObjects[i]);
 		}
+	}
+}
+
+void UCActionComponent::PrimaryAction()
+{
+	CLog::Log("UCActionComponent::PrimaryAction");
+	CheckTrue(IsUnarmedMode());
+
+	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction())
+	{
+		CLog::Log("DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction()");
+		DataObjects[(int32)Type]->GetDoAction()->PrimaryAction();
+	}
+}
+
+void UCActionComponent::Begin_SecondaryAction()
+{
+	CheckTrue(IsUnarmedMode());
+	CLog::Log("UCActionComponent::Begin_SecondaryAction");
+
+	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction())
+	{
+		CLog::Log("UCActionComponent::Begin_SecondaryAction");
+
+		DataObjects[(int32)Type]->GetDoAction()->Begin_SecondaryAction();
+	}
+}
+
+void UCActionComponent::End_SecondaryAction()
+{
+	CheckTrue(IsUnarmedMode());
+	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction())
+	{
+		DataObjects[(int32)Type]->GetDoAction()->End_SecondaryAction();
+	}
+}
+
+void UCActionComponent::OffAllCollisions()
+{
+	for (const auto& Object : DataObjects)
+	{
+		if (Object && Object->GetAttachment())
+		{
+			Object->GetAttachment()->OffCollision();
+		}
+	}
+}
+
+void UCActionComponent::DestroyAll()
+{
+	for (int32 i = 0; i < (int32)EActionType::Max; i++)
+	{
+		if (DataObjects[i])
+		{
+			if (DataObjects[i]->GetEquipment())
+			{
+				DataObjects[i]->GetEquipment()->Destroy();
+			}
+
+			if (DataObjects[i]->GetAttachment())
+			{
+				DataObjects[i]->GetAttachment()->Destroy();
+			}
+
+			if (DataObjects[i]->GetDoAction())
+			{
+				DataObjects[i]->GetDoAction()->Destroy();
+			}
+		}
+	}
+}
+
+void UCActionComponent::Abort()
+{
+	CheckNull(DataObjects[(int32)Type]);
+	CheckTrue(IsUnarmedMode());
+
+	if (DataObjects[(int32)Type]->GetEquipment())
+	{
+		DataObjects[(int32)Type]->GetEquipment()->Begin_Equip();
+		DataObjects[(int32)Type]->GetEquipment()->End_Equip();
+	}
+
+	if (DataObjects[(int32)Type]->GetDoAction())
+	{
+		DataObjects[(int32)Type]->GetDoAction()->Abort();
 	}
 }
 
 void UCActionComponent::SetUnarmedMode()
 {
-	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetEquipment())
+	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetEquipment())
 	{
-		DataAssets[(int32)Type]->GetEquipment()->UnEquip();
+		DataObjects[(int32)Type]->GetEquipment()->UnEquip();
 	}
 
-	if (DataAssets[(int32)EActionType::Unarmed] && DataAssets[(int32)EActionType::Unarmed]->GetEquipment())
+	if (DataObjects[(int32)EActionType::Unarmed] && DataObjects[(int32)EActionType::Unarmed]->GetEquipment())
 	{
-		DataAssets[(int32)EActionType::Unarmed]->GetEquipment()->Equip();
+		DataObjects[(int32)EActionType::Unarmed]->GetEquipment()->Equip();
 	}
 
 	ChangeType(EActionType::Unarmed);
@@ -80,15 +168,15 @@ void UCActionComponent::SetMode(EActionType InNewType)
 	}
 	else if (!IsUnarmedMode())
 	{
-		if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetEquipment())
+		if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetEquipment())
 		{
-			DataAssets[(int32)Type]->GetEquipment()->UnEquip(); // Prev Weapon UnEquip
+			DataObjects[(int32)Type]->GetEquipment()->UnEquip(); // Prev Weapon UnEquip
 		}
 	}
 	
-	if (DataAssets[(int32)Type] && DataAssets[(int32)Type]->GetEquipment())
+	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetEquipment())
 	{
-		DataAssets[(int32)InNewType]->GetEquipment()->Equip();
+		DataObjects[(int32)InNewType]->GetEquipment()->Equip();
 	}
 
 	ChangeType(InNewType);
@@ -97,8 +185,8 @@ void UCActionComponent::SetMode(EActionType InNewType)
 void UCActionComponent::ChangeType(EActionType InNewType)
 {
 	EActionType PrevType = Type;
-
 	Type = InNewType;
+
 
 	OnActionTypeChanged.Broadcast(PrevType, Type);
 }

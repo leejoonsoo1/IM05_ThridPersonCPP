@@ -26,6 +26,8 @@ public:
 	void SetData(FEquipmentData& InData);
 	void SetColor(FLinearColor& InColor);
 
+	FORCEINLINE const bool* IsEquipped() { return &bEquipped; }
+
 public:
 	UFUNCTION(BlueprintNativeEvent)
 	void Equip();
@@ -60,4 +62,6 @@ protected:
 private:
 	FEquipmentData	Data;
 	FLinearColor	Color;
+
+	bool bEquipped;
 };

@@ -32,7 +32,6 @@ public:
 		*OutAsset = Asset;
 	}
 	
-
 	template<typename T>
 	static void GetClass(TSubclassOf<T>* OutClass, FString InPath)
 	{

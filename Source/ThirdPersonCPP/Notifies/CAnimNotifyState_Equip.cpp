@@ -1,6 +1,7 @@
 #include "CAnimNotifyState_Equip.h"
 #include "Actions/CEquipment.h"
 #include "Actions/CActionData.h"
+#include "Actions/CActionObject.h"
 #include "Components/CActionComponent.h"
 #include "Global.h"
 
@@ -17,7 +18,7 @@ void UCAnimNotifyState_Equip::NotifyBegin(USkeletalMeshComponent* MeshComp, UAni
     UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
     CheckNull(ActionComp);
 
-    UCActionData* ActionData = ActionComp->GetCurrentDataAsset();
+    UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
     CheckNull(ActionData);
 
     ACEquipment* Equipment = ActionData->GetEquipment();
@@ -35,7 +36,7 @@ void UCAnimNotifyState_Equip::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimS
     UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
     CheckNull(ActionComp);
 
-    UCActionData* ActionData = ActionComp->GetCurrentDataAsset();
+    UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
     CheckNull(ActionData);
 
     ACEquipment* Equipment = ActionData->GetEquipment();

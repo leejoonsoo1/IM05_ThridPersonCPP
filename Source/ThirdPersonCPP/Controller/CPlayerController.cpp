@@ -1,12 +1,27 @@
 #include "CPlayerController.h"
 #include "Global.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/CStateComponent.h"
+
+ACPlayerController::ACPlayerController()
+{
+}
+
+void ACPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	StateComp = CHelpers::GetComponent<UCStateComponent>(InPawn);
+}
 
 void ACPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("OptionMenu", IE_Pressed, this, &ACPlayerController::ToggleOptionMenu);
+	InputComponent->BindAction("OptionMenu",	IE_Pressed, this, &ACPlayerController::ToggleOptionMenu);
+
+	InputComponent->BindAction("SelectAction", IE_Pressed,	this, &ACPlayerController::EnableSelectActionWidget);
+	InputComponent->BindAction("SelectAction", IE_Released, this, &ACPlayerController::DisableSelectActionWidget);
 }
 
 void ACPlayerController::ToggleOptionMenu()
@@ -31,4 +46,37 @@ void ACPlayerController::ToggleOptionMenu()
 
 	bShowMouseCursor = true;	
 	SetInputMode(FInputModeGameAndUI());
+}
+
+void ACPlayerController::EnableSelectActionWidget()
+{
+	if (StateComp)
+	{
+		CheckTrue(StateComp->IsDeadMode() || !StateComp->IsIdleMode());
+	}
+
+	if (!SelectActionWidget)
+	{
+		SelectActionWidget = CreateWidget(this, SelectActionWidgetClass);
+	}
+
+	if (SelectActionWidget)
+	{
+		SelectActionWidget->AddToViewport();
+
+		bShowMouseCursor = true;
+		SetInputMode(FInputModeGameAndUI());
+	}
+}
+
+void ACPlayerController::DisableSelectActionWidget()
+{
+	if (SelectActionWidget && SelectActionWidget->IsInViewport())
+	{
+		SelectActionWidget->RemoveFromParent();
+		SelectActionWidget = nullptr;
+
+		bShowMouseCursor = false;
+		SetInputMode(FInputModeGameOnly());
+	}
 }

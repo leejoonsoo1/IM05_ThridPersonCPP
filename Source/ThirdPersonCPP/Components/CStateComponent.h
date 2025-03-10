@@ -7,7 +7,7 @@
 UENUM(BlueprintType)
 enum class EStateType : uint8
 {
-	Idle, Roll, Backstep, Equip, Max
+	Idle, Roll, Backstep, Equip, Action, Hitted, Dead, Max
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStateTypeChanged, EStateType, InPrevType, EStateType, InNewType);
@@ -25,21 +25,32 @@ protected:
 
 public:
 	UFUNCTION(BlueprintPure)
-	bool IsIdleMode() { return Type == EStateType::Idle; }
+	bool IsIdleMode()		{ return Type == EStateType::Idle; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsRollMode() { return Type == EStateType::Roll; }
+	bool IsRollMode()		{ return Type == EStateType::Roll; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsBackstepMode() { return Type == EStateType::Backstep; }
+	bool IsBackstepMode()	{ return Type == EStateType::Backstep; }
 
 	UFUNCTION(BlueprintPure)
-	bool IsEquipMode() { return Type == EStateType::Equip; }
+	bool IsEquipMode()		{ return Type == EStateType::Equip; }
+
+	UFUNCTION(BlueprintPure)
+	bool IsActionMode()		{ return Type == EStateType::Action; }
+
+	UFUNCTION(BlueprintPure)
+	bool IsHittedMode()		{ return Type == EStateType::Hitted; }
+	UFUNCTION(BlueprintPure)
+	bool IsDeadMode()		{ return Type == EStateType::Dead; }
 
 	void SetIdleMode();
 	void SetRollMode();
 	void SetBackstepMode();
 	void SetEquipMode();
+	void SetActionMode();
+	void SetHittedMode();
+	void SetDeadMode();
 
 private:
 	void ChangeType(EStateType InNewType);
