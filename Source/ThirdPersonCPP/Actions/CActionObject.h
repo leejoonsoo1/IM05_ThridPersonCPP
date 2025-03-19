@@ -16,16 +16,16 @@ class THIRDPERSONCPP_API UCActionObject : public UObject
 
 public:
 	friend class UCActionData;
-	
-public:
-	FORCEINLINE ACEquipment*	GetEquipment()		{ return Equipment; }
-	FORCEINLINE ACAttachment*	GetAttachment()		{ return Attachment; }
-	FORCEINLINE ACDoAction*		GetDoAction()		{ return DoAction; }
-	FORCEINLINE FLinearColor	GetEquipmentColor()	{ return EquipmentColor; }
 
+public:
+	FORCEINLINE ACEquipment* GetEquipment() { return Equipment; }
+	FORCEINLINE ACAttachment* GetAttachment() { return Attachment; }
+	FORCEINLINE ACDoAction* GetDoAction() { return DoAction; }
+	FORCEINLINE FLinearColor GetEquipmentColor() { return EquipmentColor; }
+	
 private:
-	ACEquipment*	Equipment;
-	ACAttachment*	Attachment;
-	ACDoAction*		DoAction;
-	FLinearColor	EquipmentColor;
+	ACEquipment* Equipment;
+	ACAttachment* Attachment;
+	ACDoAction* DoAction;
+	FLinearColor EquipmentColor;
 };

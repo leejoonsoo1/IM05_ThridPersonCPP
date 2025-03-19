@@ -6,7 +6,7 @@
 
 class ACPatrolPath;
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THIRDPERSONCPP_API UCPatrolComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -20,6 +20,7 @@ public:
 private:
 	UPROPERTY(EditInstanceOnly, Category = "Path")
 	ACPatrolPath* PatrolPath;
+
 	UPROPERTY(EditInstanceOnly, Category = "Path")
 	int32 Index;
 

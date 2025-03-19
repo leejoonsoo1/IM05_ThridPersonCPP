@@ -12,5 +12,4 @@ void UCNameWidget::SetNameText(const FString& InControllerName, const FString& I
 	{
 		PawnName->SetText(FText::FromString(InPawnName));
 	}
-
 }

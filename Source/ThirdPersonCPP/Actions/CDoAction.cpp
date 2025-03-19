@@ -7,20 +7,22 @@
 ACDoAction::ACDoAction()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
 }
 
 void ACDoAction::BeginPlay()
 {
-	OwnerCharacter	= Cast<ACharacter>(GetOwner());
-	StateComp		= CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
-	AttributeComp	= CHelpers::GetComponent<UCAttributeComponent>(OwnerCharacter);
-	
+	OwnerCharacter = Cast<ACharacter>(GetOwner());
+	StateComp = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
+	AttributeComp = CHelpers::GetComponent<UCAttributeComponent>(OwnerCharacter);
+
 	Super::BeginPlay();
 }
 
 void ACDoAction::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
 void ACDoAction::SetDatas(TArray<FActionData>& InDatas)
@@ -32,3 +34,4 @@ void ACDoAction::SetEquipped(const bool* InEquipped)
 {
 	bEquipped = InEquipped;
 }
+

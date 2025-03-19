@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Engine\DataTable.h"
+#include "Engine/DataTable.h"
 #include "CStateComponent.h"
 #include "CMontagesComponent.generated.h"
 
@@ -26,7 +26,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	bool bCanMove;
-
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -51,7 +50,7 @@ private:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "DataTable")
 	UDataTable* DataTable;
-
+		
 private:
 	FMontageData* Datas[(int32)EStateType::Max];
 };

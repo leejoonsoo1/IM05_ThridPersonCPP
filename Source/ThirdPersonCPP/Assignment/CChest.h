@@ -15,23 +15,26 @@ public:
 	ACChest();
 
 protected:
-	virtual void OnConstruction(const FTransform& Transform)override;
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void BeginPlay() override;
+
+
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	USceneComponent*		RootComp;
+	USceneComponent* RootComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UStaticMeshComponent*	TopMeshComp;
+	UStaticMeshComponent* TopMeshComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UStaticMeshComponent*	BottomMeshComp;
+	UStaticMeshComponent* BottomMeshComp;
 
 private:
-	UPROPERTY(EditInstanceOnly, Category = "SysmbolColor")
+	UPROPERTY(EditInstanceOnly, Category = "SymbolColor")
 	FLinearColor SymbolColor;
 
 private:
 	UMaterialInstanceDynamic* DynamicMaterial;
+
 };

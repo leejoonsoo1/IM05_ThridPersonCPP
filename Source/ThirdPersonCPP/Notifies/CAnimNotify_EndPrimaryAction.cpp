@@ -26,4 +26,3 @@ void UCAnimNotify_EndPrimaryAction::Notify(USkeletalMeshComponent* MeshComp, UAn
 
 	DoAction->End_PrimaryAction();
 }
-

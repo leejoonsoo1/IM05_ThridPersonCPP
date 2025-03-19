@@ -5,7 +5,7 @@
 #include "CActionData.generated.h"
 
 class UAnimMontage;
-class ACharaacter;
+class ACharacter;
 class ACEquipment;
 class ACAttachment;
 class ACDoAction;
@@ -15,7 +15,7 @@ class ACProjectile;
 class UCActionObject;
 
 //-----------------------------------------------------------------------------
-// Struct FEquipmentData
+//struct FEquipmentData
 //-----------------------------------------------------------------------------
 USTRUCT(BlueprintType)
 struct FEquipmentData
@@ -27,10 +27,7 @@ public:
 	UAnimMontage* Montage;
 
 	UPROPERTY(EditAnywhere)
-	float PlayRate		= 1.f;
-
-	UPROPERTY(EditAnywhere)
-	float AttackDelay	= 1.f;
+	float PlayRate = 1.f;
 
 	UPROPERTY(EditAnywhere)
 	FName StartSection;
@@ -38,14 +35,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool bCanMove = true;
 
-	// (true 카메라 앞 || false 키보드 누른) 방향을 바라본다.
 	UPROPERTY(EditAnywhere)
 	bool bUseControlRotation = true;
-
 };
 
 //-----------------------------------------------------------------------------
-// Struct FActionData
+//struct FActionData
 //-----------------------------------------------------------------------------
 USTRUCT(BlueprintType)
 struct FActionData : public FEquipmentData
@@ -63,7 +58,7 @@ public:
 	UParticleSystem* Effect;
 
 	UPROPERTY(EditAnywhere)
-	FTransform EffectTransform;
+	FTransform EffectTransfrom;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UCameraShake> ShakeClass;
@@ -73,19 +68,21 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-// Class UCActionData
+//class UCActionData
 //-----------------------------------------------------------------------------
 UCLASS()
 class THIRDPERSONCPP_API UCActionData : public UDataAsset
 {
 	GENERATED_BODY()
-	
+
 public:
-	void BeginPlay(ACharacter* InOwnerChacater, UCActionObject** OutActionObject);
+	void BeginPlay(ACharacter* InOwnerCharacter, UCActionObject** OutActionObject);
+
+	
 
 private:
 	FString MakeLabel(ACharacter* InOwnerCharacter, FString InMiddleName);
-
+	
 public:
 	UPROPERTY(EditAnywhere, Category = "Equipment")
 	TSubclassOf<ACEquipment> EquipmentClass;
@@ -103,5 +100,7 @@ public:
 	TSubclassOf<ACDoAction> DoActionClass;
 
 	UPROPERTY(EditAnywhere, Category = "DoAction")
-	TArray<FActionData>		DoActionDatas;
+	TArray<FActionData> DoActionDatas;
+
+
 };

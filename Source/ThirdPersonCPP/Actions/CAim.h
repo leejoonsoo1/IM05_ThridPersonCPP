@@ -8,7 +8,7 @@
 class ACharacter;
 class USpringArmComponent;
 class UCameraComponent;
-class UCurve;
+class UCurveFloat;
 class ACHUD;
 
 UCLASS()
@@ -23,7 +23,7 @@ public:
 	void Tick(float DeltaTime);
 
 	FORCEINLINE bool IsZooming() { return bZooming; }
-	FORCEINLINE bool IsAvailable() { return SpringArmComp && CameraComp; }
+	FORCEINLINE bool IsAvaliable() { return SpringArmComp && CameraComp; }
 
 	void On();
 	void Off();
@@ -33,14 +33,14 @@ private:
 	void OnProgress(float Output);
 
 private:
-	ACharacter*				OwnerCharacter;
-	USpringArmComponent*	SpringArmComp;
-	UCameraComponent*		CameraComp;
+	ACharacter* OwnerCharacter;
+	USpringArmComponent* SpringArmComp;
+	UCameraComponent* CameraComp;
 
-	bool					bZooming;
+	bool bZooming;
 
-	UCurveFloat*			AimCurve;
-	FTimeline				AimTimeline;
+	UCurveFloat* AimCurve;
+	FTimeline AimTimeline;
 
-	ACHUD*					HUD;
+	ACHUD* HUD;
 };

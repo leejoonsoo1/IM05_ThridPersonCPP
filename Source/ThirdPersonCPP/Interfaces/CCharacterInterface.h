@@ -16,7 +16,7 @@ class THIRDPERSONCPP_API ICCharacterInterface
 
 public:
 	virtual void SetBodyColor(FLinearColor InColor) = 0;
-
+	
 	virtual void Hitted() = 0;
 	virtual void Dead() = 0;
 	virtual void End_Dead() {}

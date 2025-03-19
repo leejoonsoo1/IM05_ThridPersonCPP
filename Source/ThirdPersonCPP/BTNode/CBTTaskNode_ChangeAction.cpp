@@ -3,7 +3,6 @@
 #include "AIController.h"
 #include "Components/CActionComponent.h"
 #include "Components/CStateComponent.h"
-#include "Actions/CActionData.h"
 
 UCBTTaskNode_ChangeAction::UCBTTaskNode_ChangeAction()
 {
@@ -24,7 +23,7 @@ EBTNodeResult::Type UCBTTaskNode_ChangeAction::ExecuteTask(UBehaviorTreeComponen
 
 	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(EnemyPawn);
 	CheckNullResult(ActionComp, EBTNodeResult::Failed);
-
+	
 	if (Type == EActionType::Warp && !ActionComp->IsWarpMode())
 	{
 		ActionComp->SetWarpMode();
@@ -41,22 +40,17 @@ void UCBTTaskNode_ChangeAction::TickTask(UBehaviorTreeComponent& OwnerComp, uint
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	PrintLine();
-
 	AAIController* AIC = OwnerComp.GetAIOwner();
 	CheckNull(AIC);
-	
 
 	APawn* EnemyPawn = AIC->GetPawn();
 	CheckNull(EnemyPawn);
-	
 
 	UCStateComponent* StateComp = CHelpers::GetComponent<UCStateComponent>(EnemyPawn);
 	CheckNull(StateComp);
 
-
 	if (StateComp->IsIdleMode())
 	{
-	}
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 }

@@ -13,8 +13,8 @@ UCLASS()
 class THIRDPERSONCPP_API ACAttachment : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	ACAttachment();
 
 protected:
@@ -32,7 +32,7 @@ public:
 	void OnEquip();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void OnUnEquip();
+	void OnUnequip();
 
 public:
 	void OnCollision();

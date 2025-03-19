@@ -9,14 +9,13 @@ void UCEnvQueryContext_Player::ProvideContext(FEnvQueryInstance& QueryInstance, 
 {
 	Super::ProvideContext(QueryInstance, ContextData);
 
-	//1. UGameplayStatics::GetPlayerCharacter();
 	ACharacter* Querior = Cast<ACharacter>(QueryInstance.Owner.Get());
 	if (Querior)
 	{
 		UCBehaviorComponent* BehaviorComp = CHelpers::GetComponent<UCBehaviorComponent>(Querior->GetController());
 		if (BehaviorComp)
 		{
-			ACPlayer* Player = BehaviorComp->GetTargetPlayerValue();
+			ACPlayer* Player = BehaviorComp->GetPlayerValue();
 			if (Player)
 			{
 				UEnvQueryItemType_Actor::SetContextHelper(ContextData, Player);
@@ -24,9 +23,7 @@ void UCEnvQueryContext_Player::ProvideContext(FEnvQueryInstance& QueryInstance, 
 			}
 		}
 	}
-
+	
 	UEnvQueryItemType_Actor::SetContextHelper(ContextData, UGameplayStatics::GetPlayerPawn(Querior->GetWorld(), 0));
-
-	//2. QueryInstance.Owner -> Querior -> AIC -> BB -> PlayerKey
-
+	
 }

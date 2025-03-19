@@ -8,7 +8,7 @@ ACChest::ACChest()
 	CHelpers::CreateSceneComponent(this, &BottomMeshComp, "BottomMeshComp", RootComp);
 	CHelpers::CreateSceneComponent(this, &TopMeshComp, "TopMeshComp", BottomMeshComp);
 
-	UStaticMesh* TopMeshAsset, * BottomMeshAsset;
+	UStaticMesh* TopMeshAsset, *BottomMeshAsset;
 	CHelpers::GetAsset(&TopMeshAsset, "/Game/Assignment/Chest/SM_ChestTop");
 	CHelpers::GetAsset(&BottomMeshAsset, "/Game/Assignment/Chest/SM_ChestBottom");
 
@@ -22,6 +22,8 @@ ACChest::ACChest()
 void ACChest::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
+
+	PrintLine();
 
 	UMaterialInterface* Material;
 	CHelpers::GetAssetDynamic(&Material, "/Game/Assignment/Chest/MI_Chest");
@@ -40,7 +42,6 @@ void ACChest::OnConstruction(const FTransform& Transform)
 	}
 }
 
-// Called when the game starts or when spawned
 void ACChest::BeginPlay()
 {
 	Super::BeginPlay();

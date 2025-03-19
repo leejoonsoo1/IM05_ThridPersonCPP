@@ -6,6 +6,7 @@
 
 class UBehaviorTree;
 class UCPatrolComponent;
+
 UCLASS()
 class THIRDPERSONCPP_API ACEnemy_AI : public ACEnemy
 {
@@ -14,7 +15,7 @@ class THIRDPERSONCPP_API ACEnemy_AI : public ACEnemy
 public:
 	ACEnemy_AI();
 
-	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return BehaviorTree;	}
+	FORCEINLINE UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
@@ -23,5 +24,5 @@ protected:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UBehaviorTree* BehaviorTree;
-
+	
 };

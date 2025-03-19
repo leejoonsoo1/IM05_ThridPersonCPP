@@ -10,12 +10,12 @@ UCLASS()
 class THIRDPERSONCPP_API UCHealthWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
-public:
-	void Update(float InCurrentHealth, float InMaxHealth);
 
+public:
+	UFUNCTION(BlueprintCallable)
+	void Update(float InCurrentHealth, float InMaxHealth);
+	
 private:
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* HealthBar;
-
 };

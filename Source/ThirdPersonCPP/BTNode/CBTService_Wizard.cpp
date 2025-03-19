@@ -26,25 +26,23 @@ void UCBTService_Wizard::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	UCStateComponent* StateComp = CHelpers::GetComponent<UCStateComponent>(EnemyPawn);
 	CheckNull(StateComp);
 
-	// Dead
+	//Dead
 	if (StateComp->IsDeadMode())
 	{
 		BehaviorComp->SetWaitMode();
 		AIC->GetBrainComponent()->StopLogic("Dead");
-
 		return;
 	}
 
-	// Hitted
+	//Hitted
 	if (StateComp->IsHittedMode())
 	{
 		BehaviorComp->SetHittedMode();
-
 		return;
 	}
 
 	//Read Player from BB
-	ACPlayer* Player = BehaviorComp->GetTargetPlayerValue();
+	ACPlayer* Player = BehaviorComp->GetPlayerValue();
 
 	//No Perceived Player
 	if (!Player)
@@ -58,22 +56,20 @@ void UCBTService_Wizard::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	//Get Distance To
 	float Distance = EnemyPawn->GetDistanceTo(Player);
 
+	//Perceived Player
 	UCStateComponent* OtherStateComp = CHelpers::GetComponent<UCStateComponent>(Player);
 	if (OtherStateComp && OtherStateComp->IsDeadMode())
-	{
+	{ 
 		BehaviorComp->SetWaitMode();
-
 		return;
 	}
 
-	//Perceived Player
 	AIC->SetFocus(Player);
 
 	//In Action Range
 	if (Distance < AIC->GetBehaviorRange())
 	{
 		BehaviorComp->SetRunAwayMode();
-
 		return;
 	}
 
@@ -84,3 +80,4 @@ void UCBTService_Wizard::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		return;
 	}
 }
+

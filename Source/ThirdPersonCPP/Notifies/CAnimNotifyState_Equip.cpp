@@ -1,48 +1,45 @@
 #include "CAnimNotifyState_Equip.h"
+#include "Global.h"
 #include "Actions/CEquipment.h"
 #include "Actions/CActionData.h"
 #include "Actions/CActionObject.h"
 #include "Components/CActionComponent.h"
-#include "Global.h"
 
 FString UCAnimNotifyState_Equip::GetNotifyName_Implementation() const
 {
-    return "Equip";
+	return "Equip";
 }
 
 void UCAnimNotifyState_Equip::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-    Super::NotifyBegin(MeshComp, Animation, TotalDuration);
-    CheckNull(MeshComp->GetOwner());
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
+	CheckNull(MeshComp->GetOwner());
+	
+	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
+	CheckNull(ActionComp);
 
-    UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
-    CheckNull(ActionComp);
-
-    UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
-    CheckNull(ActionData);
-
-    ACEquipment* Equipment = ActionData->GetEquipment();
-    CheckNull(Equipment);
-
-    Equipment->Begin_Equip();
+	UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
+	CheckNull(ActionData);
+		
+	ACEquipment* Equipment = ActionData->GetEquipment();
+	CheckNull(Equipment);
+	
+	Equipment->Begin_Equip();
 }
 
 void UCAnimNotifyState_Equip::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-    Super::NotifyEnd(MeshComp, Animation);
+	Super::NotifyEnd(MeshComp, Animation);
+	CheckNull(MeshComp->GetOwner());
 
-    CheckNull(MeshComp->GetOwner());
+	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
+	CheckNull(ActionComp);
 
-    UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
-    CheckNull(ActionComp);
+	UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
+	CheckNull(ActionData);
 
-    UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
-    CheckNull(ActionData);
+	ACEquipment* Equipment = ActionData->GetEquipment();
+	CheckNull(Equipment);
 
-    ACEquipment* Equipment = ActionData->GetEquipment();
-    CheckNull(Equipment);
-
-    Equipment->End_Equip();
-
+	Equipment->End_Equip();
 }
-

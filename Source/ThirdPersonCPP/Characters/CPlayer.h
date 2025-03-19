@@ -27,9 +27,8 @@ class THIRDPERSONCPP_API ACPlayer : public ACharacter, public ICCharacterInterfa
 public:
 	ACPlayer();
 
-public:
-	void SetBodyColor(FLinearColor InColor)			override;
-	virtual FGenericTeamId GetGenericTeamId() const	override;
+	void SetBodyColor(FLinearColor InColor) override;
+	virtual FGenericTeamId GetGenericTeamId() const override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -45,7 +44,7 @@ private:
 	void OnTurn(float Axis);
 	void OnLookUp(float Axis);
 	void OnZoom(float Axis);
-	
+
 	void OnEvade();
 	void OnWalk();
 	void OffWalk();
@@ -61,14 +60,15 @@ private:
 	void OnBeginSecondaryAction();
 	void OnEndSecondaryAction();
 
+
 private:
 	void Begin_Roll();
 	void Begin_Backstep();
 
 	void RollingRotation();
 
-	void Hitted()	override;
-	void Dead()		override;
+	void Hitted() override;
+	void Dead() override;
 
 	UFUNCTION()
 	void End_Dead() override;
@@ -82,41 +82,42 @@ private:
 	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	USpringArmComponent*	SpringArmComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	USpringArmComponent* SpringArmComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UCameraComponent*		CameraComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCameraComponent* CameraComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UCAttributeComponent*	AttributeComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCAttributeComponent* AttributeComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UCOptionComponent*		OptionComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCOptionComponent* OptionComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UCStateComponent*		StateComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCStateComponent* StateComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UCMontagesComponent*	MontagesComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCMontagesComponent* MontagesComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UCActionComponent*		ActionComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCActionComponent* ActionComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UCFeetComponent*		FeetComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UCFeetComponent* FeetComp;
 
-	UPROPERTY(VisibleDefaultsOnly,	Category = "Components")
-	UPostProcessComponent*	PostProcessComp;
+	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
+	UPostProcessComponent* PostProcessComp;
+	
 
 protected:
-	UPROPERTY(EditDefaultsOnly,		Category = "Team")
+	UPROPERTY(EditDefaultsOnly, Category = "Team")
 	uint8 TeamID;
 
-	UPROPERTY(EditDefaultsOnly,		Category = "Dead")
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
 	UMaterialInstanceConstant* PostProcessMaterial;
 
-	UPROPERTY(EditDefaultsOnly,		Category = "Dead")
+	UPROPERTY(EditDefaultsOnly, Category = "Dead")
 	TSubclassOf<UUserWidget> GameOverWidgetClass;
 
 private:

@@ -9,7 +9,6 @@ bool UCPatrolComponent::GetMoveTo(FVector& OutLocation)
 	CheckFalseResult(IsPathValid(), false);
 
 	OutLocation = PatrolPath->GetSplineComponent()->GetLocationAtSplinePoint(Index, ESplineCoordinateSpace::World);
-
 	return true;
 }
 

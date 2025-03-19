@@ -17,7 +17,7 @@ class THIRDPERSONCPP_API UCAttributeComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:
+public:	
 	UCAttributeComponent();
 
 protected:
@@ -25,18 +25,18 @@ protected:
 
 public:
 	UFUNCTION(BlueprintPure)
-	FORCEINLINE float GetMaxHealth()		{ return MaxHealth;		}
+	FORCEINLINE float GetMaxHealth() { return MaxHealth; }
 
 	UFUNCTION(BlueprintPure)
-	FORCEINLINE float GetCurrentHealth()	{ return CurrentHealth; }
+	FORCEINLINE float GetCurrentHealth() { return CurrentHealth; }
 
-public:	
-	FORCEINLINE float GetSneakSpeed()		{ return WalkSpeeds[(int32)EWalkSpeedType::Sneak];	}
-	FORCEINLINE float GetWalkSpeed()		{ return WalkSpeeds[(int32)EWalkSpeedType::Walk];	}
-	FORCEINLINE float GetSprintSpeed()		{ return WalkSpeeds[(int32)EWalkSpeedType::Sprint]; }
-	FORCEINLINE bool  IsCanMove()			{ return bCanMove;									}
+	FORCEINLINE float GetSnekSpeed() { return WalkSpeeds[(int32)EWalkSpeedType::Sneak]; }
+	FORCEINLINE float GetWalkSpeed() { return WalkSpeeds[(int32)EWalkSpeedType::Walk]; }
+	FORCEINLINE float GetSprintSpeed() { return WalkSpeeds[(int32)EWalkSpeedType::Sprint]; }
 
 	void SetSpeed(EWalkSpeedType InType);
+
+	FORCEINLINE bool IsCanMove() { return bCanMove; }
 
 	void SetMove();
 	void SetStop();
@@ -56,6 +56,6 @@ protected:
 	float WalkSpeeds[(int32)EWalkSpeedType::Max];
 
 private:
-	float	CurrentHealth;
-	bool	bCanMove;
+	float CurrentHealth;
+	bool bCanMove;
 };

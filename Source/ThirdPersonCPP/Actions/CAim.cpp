@@ -12,21 +12,15 @@ UCAim::UCAim()
 
 void UCAim::Initialize(ACharacter* InOwnerCharacter)
 {
-	OwnerCharacter	= InOwnerCharacter;
-	SpringArmComp	= CHelpers::GetComponent<USpringArmComponent>(OwnerCharacter);
-	CameraComp		= CHelpers::GetComponent<UCameraComponent>(OwnerCharacter);
+	OwnerCharacter = InOwnerCharacter;
+	SpringArmComp = CHelpers::GetComponent<USpringArmComponent>(OwnerCharacter);
+	CameraComp = CHelpers::GetComponent<UCameraComponent>(OwnerCharacter);
 
 	FOnTimelineFloat AimTimelineDelegate;
 	AimTimelineDelegate.BindUFunction(this, "OnProgress");
 	AimTimeline.AddInterpFloat(AimCurve, AimTimelineDelegate);
 
-	if (SpringArmComp)
-	{
-		SpringArmComp->SocketOffset = FVector(0, 50, 40);
-	}
-
 	APlayerController* PC = OwnerCharacter->GetController<APlayerController>();
-
 	if (PC)
 	{
 		HUD = PC->GetHUD<ACHUD>();
@@ -40,40 +34,37 @@ void UCAim::Tick(float DeltaTime)
 
 void UCAim::On()
 {
-	CheckFalse(IsAvailable());
+	CheckFalse(IsAvaliable());
 	CheckTrue(bZooming);
 
 	bZooming = true;
 
-	SpringArmComp->TargetArmLength	= 300.f;
-	SpringArmComp->SocketOffset	= FVector(0, 50, 45);
-	SpringArmComp->bEnableCameraLag	= false;
+	SpringArmComp->TargetArmLength = 250.f;
+	SpringArmComp->SocketOffset = FVector(0, 60, 10);
+	SpringArmComp->bEnableCameraLag = false;
 
-	// 1) PlayerController
-	// 2) OwnerCharacter
-	
-	if (HUD)
+	if(HUD)
 	{
-		HUD->EnableAimTextTure();	
+		HUD->EnableAimTexture();
 	}
-
+	
 	AimTimeline.PlayFromStart();
 }
 
 void UCAim::Off()
 {
-	CheckFalse(IsAvailable());
+	CheckFalse(IsAvaliable());
 	CheckFalse(bZooming);
 
 	bZooming = false;
 
-	SpringArmComp->TargetArmLength	= 500.f;
-	SpringArmComp->SocketOffset	= FVector(0, 50, 40);
+	SpringArmComp->TargetArmLength = 300.f;
+	SpringArmComp->SocketOffset = FVector::ZeroVector;
 	SpringArmComp->bEnableCameraLag = true;
 
 	if (HUD)
 	{
-		HUD->DisableAimTextTure();
+		HUD->DisableAimTexture();
 	}
 
 	AimTimeline.ReverseFromEnd();

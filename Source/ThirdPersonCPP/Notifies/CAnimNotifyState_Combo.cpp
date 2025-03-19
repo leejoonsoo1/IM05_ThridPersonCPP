@@ -7,45 +7,46 @@
 
 FString UCAnimNotifyState_Combo::GetNotifyName_Implementation() const
 {
-    return "Combo";
+	return "Combo";
 }
 
 void UCAnimNotifyState_Combo::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-    Super::NotifyBegin(MeshComp, Animation, TotalDuration);
-    CheckNull(MeshComp->GetOwner());
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
+	CheckNull(MeshComp->GetOwner());
 
-    UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
-    CheckNull(ActionComp);
+	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
+	CheckNull(ActionComp);
 
-    UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
-    CheckNull(ActionData);
+	UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
+	CheckNull(ActionData);
 
-    ACDoAction* DoAction = ActionData->GetDoAction();
-    CheckNull(DoAction);
+	ACDoAction* DoAction = ActionData->GetDoAction();
+	CheckNull(DoAction);
 
-    ACDoAction_Melee* Melee = Cast<ACDoAction_Melee>(DoAction);
-    CheckNull(Melee);
+	ACDoAction_Melee* Melee =  Cast<ACDoAction_Melee>(DoAction);
+	CheckNull(Melee);
 
-    Melee->EnableCombo();
+	Melee->EnableCombo();
 }
 
 void UCAnimNotifyState_Combo::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
-    Super::NotifyEnd(MeshComp, Animation);
-    CheckNull(MeshComp->GetOwner());
+	Super::NotifyEnd(MeshComp, Animation);
+	CheckNull(MeshComp->GetOwner());
 
-    UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
-    CheckNull(ActionComp);
+	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(MeshComp->GetOwner());
+	CheckNull(ActionComp);
 
-    UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
-    CheckNull(ActionData);
+	UCActionObject* ActionData = ActionComp->GetCurrentDataObject();
+	CheckNull(ActionData);
 
-    ACDoAction* DoAction = ActionData->GetDoAction();
-    CheckNull(DoAction);
+	ACDoAction* DoAction = ActionData->GetDoAction();
+	CheckNull(DoAction);
 
-    ACDoAction_Melee* Melee = Cast<ACDoAction_Melee>(DoAction);
-    CheckNull(Melee);
+	ACDoAction_Melee* Melee = Cast<ACDoAction_Melee>(DoAction);
+	CheckNull(Melee);
 
-    Melee->DisableCombo();
+	Melee->DisableCombo();
 }
+

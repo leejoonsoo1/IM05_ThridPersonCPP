@@ -4,20 +4,23 @@
 
 UCMontagesComponent::UCMontagesComponent()
 {
+
 }
+
 
 void UCMontagesComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	if (!DataTable)
 	{
-		CLog::Log("DataTable asset is not set!!");
+		CLog::Log("DataTale asset is not set!!");
 		return;
 	}
 
 	TArray<FMontageData*> ReadDatas;
 	DataTable->GetAllRows<FMontageData>("", ReadDatas);
+
 
 	for (int32 i = 0; i < (int32)EStateType::Max; i++)
 	{
@@ -30,6 +33,7 @@ void UCMontagesComponent::BeginPlay()
 			}
 		}
 	}
+
 }
 
 void UCMontagesComponent::PlayRoll()
@@ -49,7 +53,7 @@ void UCMontagesComponent::PlayHitted()
 
 void UCMontagesComponent::PlayAnimMontage(EStateType InType)
 {
-	ACharacter* OwnerCharacter = Cast<ACharacter>(GetOwner());
+	ACharacter* OwnerCharacter =  Cast<ACharacter>(GetOwner());
 	CheckNull(OwnerCharacter);
 
 	const FMontageData* Data = Datas[(int32)InType];

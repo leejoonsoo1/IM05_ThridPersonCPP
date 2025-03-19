@@ -14,11 +14,12 @@ class THIRDPERSONCPP_API UCNameWidget : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetNameText(const FString& InControllerName, const FString& InPawnName);
-		
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ControllerName;
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* PawnName;
+	
 };

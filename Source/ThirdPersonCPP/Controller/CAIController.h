@@ -19,7 +19,6 @@ public:
 	ACAIController();
 
 	float GetSightRadius();
-	
 	FORCEINLINE float GetBehaviorRange() { return BehaviorRange; }
 
 protected:
@@ -60,6 +59,6 @@ protected:
 
 private:
 	ACEnemy_AI* PossessedEnemy;
-
+	
 	UAISenseConfig_Sight* Sight;
 };

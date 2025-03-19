@@ -1,9 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "Kismet\KismetSystemLibrary.h"
+#include "Components/ActorComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "CFeetComponent.generated.h"
+
+class ACharacter;
 
 USTRUCT(BlueprintType)
 struct FFeetData
@@ -27,11 +29,11 @@ public:
 	FRotator RightRotation;
 };
 
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THIRDPERSONCPP_API UCFeetComponent : public UActorComponent
 {
 	GENERATED_BODY()
-	
+
 public:	
 	UCFeetComponent();
 
@@ -45,27 +47,27 @@ public:
 	FORCEINLINE const FFeetData& GetData() { return Data; }
 
 private:
-	void Trace(FName InSocket, float& OutDistance, FRotator& OutRotation);
+	void Trace(FName InSoket, float& OutDistance, FRotator& OutRotation);
 
 private:
-	UPROPERTY(EditInstanceOnly, Category = "IK")
+	UPROPERTY(EditDefaultsOnly, Category = "IK")
 	FName LeftSocket;
 
-	UPROPERTY(EditInstanceOnly, Category = "IK")
+	UPROPERTY(EditDefaultsOnly, Category = "IK")
 	FName RightSocket;
 
-	UPROPERTY(EditInstanceOnly, Category = "IK")
-	float Additinal;
+	UPROPERTY(EditDefaultsOnly, Category = "IK")
+	float Additional;
 
-	UPROPERTY(EditInstanceOnly, Category = "IK")
+	UPROPERTY(EditDefaultsOnly, Category = "IK")
 	float FootHeight;
 
-	UPROPERTY(EditInstanceOnly, Category = "IK")
+	UPROPERTY(EditDefaultsOnly, Category = "IK")
 	float InterpSpeed;
 
-	UPROPERTY(EditInstanceOnly, Category = "IK")
+	UPROPERTY(EditDefaultsOnly, Category = "IK")
 	TEnumAsByte<EDrawDebugTrace::Type> DrawDebugType;
-
+		
 private:
 	FFeetData Data;
 

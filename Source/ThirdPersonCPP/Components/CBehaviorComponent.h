@@ -10,7 +10,7 @@ class ACPlayer;
 UENUM(BlueprintType)
 enum class EBehaviorType : uint8
 {
-	Wait, Approach, Action, Patrol, Hitted, RunAway, 
+	Wait, Approach, Action, Patrol, Hitted, RunAway,
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -23,20 +23,20 @@ public:
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "BlackboardKeyName")
-	FName PlayerKeyName		= "PlayerKey";
+	FName PlayKeyName = "PlayerKey";
 
 	UPROPERTY(EditDefaultsOnly, Category = "BlackboardKeyName")
-	FName LocationKeyName	= "LocationKey";
+	FName LocationKeyName = "LocationKey";
 
 	UPROPERTY(EditDefaultsOnly, Category = "BlackboardKeyName")
-	FName BehaviorKeyName	= "BehaviorKey";
-	
+	FName BehaviorKeyName = "BehaviorKey";
+
 public:
 	void SetBlackboardComponent(UBlackboardComponent* InBlackboardComp);
 
 	UFUNCTION(BlueprintPure)
-	bool IsWaitMode();	
-	
+	bool IsWaitMode();
+
 	UFUNCTION(BlueprintPure)
 	bool IsApproachMode();
 
@@ -59,8 +59,8 @@ public:
 	void SetHittedMode();
 	void SetRunAwayMode();
 
-	ACPlayer*	GetTargetPlayerValue();
-	FVector		GetLocationValue();
+	ACPlayer* GetPlayerValue();
+	FVector GetLocationValue();
 
 private:
 	EBehaviorType GetType();
@@ -68,4 +68,5 @@ private:
 
 private:
 	UBlackboardComponent* BlackboardComp;
+		
 };

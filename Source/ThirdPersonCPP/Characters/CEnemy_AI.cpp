@@ -6,3 +6,4 @@ ACEnemy_AI::ACEnemy_AI()
 {
 	CHelpers::CreateActorComponent<UCPatrolComponent>(this, &PatrolComp, "PatrolComp");
 }
+

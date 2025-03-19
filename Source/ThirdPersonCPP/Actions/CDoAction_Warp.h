@@ -15,20 +15,20 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	virtual void Tick(float DeltaTime)	override;
+	virtual void Tick(float DeltaTime) override;
 
 public:
-	virtual void PrimaryAction()		override;
-	virtual void Begin_PrimaryAction()	override;
-	virtual void End_PrimaryAction()	override;
+	virtual void PrimaryAction() override;
+	virtual void Begin_PrimaryAction() override;
+	virtual void End_PrimaryAction() override;
 
 private:
 	bool GetCursorLocation(FVector& OutLocation);
-	void SetPreviewMeshColor(FLinearColor InColor);
+	void SetPerviewMeshColor(FLinearColor InColor);
 
 	bool IsOwnerPlayer();
-
+	
 private:
-	USkeletalMeshComponent* PreviewMeshComp;
+	USkeletalMeshComponent* PerviewMeshComp;
 	FVector LocationToWarp;
 };

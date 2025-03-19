@@ -33,25 +33,24 @@ public:
 	void Equip();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void UnEquip();
-
-	UFUNCTION(BlueprintNativeEvent)
 	void Begin_Equip();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void End_Equip();
 
+	UFUNCTION(BlueprintNativeEvent)
+	void Unequip();
 
 public:
 	UPROPERTY(BlueprintAssignable)
 	FEquipmentDelegate OnEquipmentDelegate;
 
 	UPROPERTY(BlueprintAssignable)
-	FEquipmentDelegate OnUnEquipmentDelegate;
+	FEquipmentDelegate OnUnequipmentDelegate;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	ACharacter*	OwnerCharacter;
+	ACharacter* OwnerCharacter;
 
 	UPROPERTY(BlueprintReadOnly)
 	UCStateComponent* StateComp;
@@ -60,8 +59,8 @@ protected:
 	UCAttributeComponent* AttributeComp;
 
 private:
-	FEquipmentData	Data;
-	FLinearColor	Color;
+	FEquipmentData Data;
+	FLinearColor Color;
 
 	bool bEquipped;
 };

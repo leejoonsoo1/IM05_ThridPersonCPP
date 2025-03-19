@@ -9,7 +9,7 @@ UCLASS()
 class THIRDPERSONCPP_API UCEnvQueryContext_Player : public UEnvQueryContext
 {
 	GENERATED_BODY()
-
+	
 public:
 	virtual void ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const override;
 };

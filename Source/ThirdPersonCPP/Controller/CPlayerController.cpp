@@ -5,6 +5,7 @@
 
 ACPlayerController::ACPlayerController()
 {
+	
 }
 
 void ACPlayerController::OnPossess(APawn* InPawn)
@@ -18,17 +19,17 @@ void ACPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("OptionMenu",	IE_Pressed, this, &ACPlayerController::ToggleOptionMenu);
+	InputComponent->BindAction("OptionMenu", IE_Pressed, this, &ACPlayerController::ToggleOptionMenu);
 
-	InputComponent->BindAction("SelectAction", IE_Pressed,	this, &ACPlayerController::EnableSelectActionWidget);
-	InputComponent->BindAction("SelectAction", IE_Released, this, &ACPlayerController::DisableSelectActionWidget);
+	InputComponent->BindAction("SelectAction", IE_Pressed, this, &ACPlayerController::EnableSelectActionWidget);
+	InputComponent->BindAction("SelectAction", IE_Released, this, &ACPlayerController::DiableSelectActionWidget);
 }
 
 void ACPlayerController::ToggleOptionMenu()
 {
 	CheckNull(OptionMenuClass);
 
-	if (OptionMenu && OptionMenu->IsInViewport()) 
+	if (OptionMenu && OptionMenu->IsInViewport())
 	{
 		OptionMenu->RemoveFromParent();
 		OptionMenu = nullptr;
@@ -40,11 +41,11 @@ void ACPlayerController::ToggleOptionMenu()
 	}
 
 	OptionMenu = CreateWidget<UUserWidget>(this, OptionMenuClass);
-
 	CheckNull(OptionMenu);
+
 	OptionMenu->AddToViewport(100);
 
-	bShowMouseCursor = true;	
+	bShowMouseCursor = true;
 	SetInputMode(FInputModeGameAndUI());
 }
 
@@ -69,7 +70,7 @@ void ACPlayerController::EnableSelectActionWidget()
 	}
 }
 
-void ACPlayerController::DisableSelectActionWidget()
+void ACPlayerController::DiableSelectActionWidget()
 {
 	if (SelectActionWidget && SelectActionWidget->IsInViewport())
 	{
@@ -79,4 +80,5 @@ void ACPlayerController::DisableSelectActionWidget()
 		bShowMouseCursor = false;
 		SetInputMode(FInputModeGameOnly());
 	}
+
 }

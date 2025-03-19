@@ -25,15 +25,16 @@ public:
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	USceneComponent*		RootComp;
+	USceneComponent* RootComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	USplineComponent*		SplineComp;
+	USplineComponent* SplineComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UTextRenderComponent*	TextComp;
+	UTextRenderComponent* TextComp;
 
 private:
 	UPROPERTY(EditInstanceOnly, Category = "Spline")
 	bool bClosedLoop;
+
 };

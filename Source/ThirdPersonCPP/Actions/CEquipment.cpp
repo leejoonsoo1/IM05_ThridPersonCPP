@@ -13,10 +13,10 @@ ACEquipment::ACEquipment()
 
 void ACEquipment::BeginPlay()
 {
-	OwnerCharacter	= Cast<ACharacter>(GetOwner());
-	StateComp		= CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
-	AttributeComp	= CHelpers::GetComponent<UCAttributeComponent>(OwnerCharacter);
-	
+	OwnerCharacter = Cast<ACharacter>(GetOwner());
+	StateComp = CHelpers::GetComponent<UCStateComponent>(OwnerCharacter);
+	AttributeComp = CHelpers::GetComponent<UCAttributeComponent>(OwnerCharacter);
+
 	Super::BeginPlay();
 }
 
@@ -54,17 +54,8 @@ void ACEquipment::Equip_Implementation()
 
 	ICCharacterInterface* CharacterInterface = Cast<ICCharacterInterface>(OwnerCharacter);
 	CheckNull(CharacterInterface);
+
 	CharacterInterface->SetBodyColor(Color);
-}
-
-void ACEquipment::UnEquip_Implementation()
-{
-	bEquipped = false;
-
-	OwnerCharacter->bUseControllerRotationYaw = false;
-	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
-
-	OnUnEquipmentDelegate.Broadcast();
 }
 
 void ACEquipment::Begin_Equip_Implementation()
@@ -78,4 +69,14 @@ void ACEquipment::End_Equip_Implementation()
 
 	StateComp->SetIdleMode();
 	AttributeComp->SetMove();
+}
+
+void ACEquipment::Unequip_Implementation()
+{
+	bEquipped = false;
+
+	OwnerCharacter->bUseControllerRotationYaw = false;
+	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	OnUnequipmentDelegate.Broadcast();
 }

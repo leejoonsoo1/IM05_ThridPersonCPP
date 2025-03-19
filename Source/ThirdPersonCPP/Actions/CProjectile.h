@@ -31,12 +31,12 @@ public:
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	USphereComponent*				SphereComp;
+	USphereComponent* SphereComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UParticleSystemComponent*		ParticleComp;
+	UParticleSystemComponent* ParticleComp;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "Components")
-	UProjectileMovementComponent*	MovementComp;
+	UProjectileMovementComponent* MovementComp;
 
 };

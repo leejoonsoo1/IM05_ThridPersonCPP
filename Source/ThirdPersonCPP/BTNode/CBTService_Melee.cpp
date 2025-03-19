@@ -28,52 +28,47 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	CheckNull(StateComp);
 
 	UCPatrolComponent* PatrolComp = CHelpers::GetComponent<UCPatrolComponent>(EnemyPawn);
-	CheckNull(PatrolComp);
+	//CheckNull(PatrolComp);
 
-	// Dead
+	//Dead
 	if (StateComp->IsDeadMode())
 	{
 		BehaviorComp->SetWaitMode();
 		AIC->GetBrainComponent()->StopLogic("Dead");
-
 		return;
 	}
 
-	// Hitted
+	//Hitted
 	if (StateComp->IsHittedMode())
 	{
 		BehaviorComp->SetHittedMode();
-
 		return;
 	}
 
-	// Read Player From BB
-	ACPlayer* Player = BehaviorComp->GetTargetPlayerValue();
-
-	// No Perceived Player
+	//Read Player from BB
+	ACPlayer* Player = BehaviorComp->GetPlayerValue();
+	
+	//No Perceived Player
 	if (!Player)
 	{
 		if (PatrolComp && PatrolComp->IsPathValid())
 		{
 			BehaviorComp->SetPatrolMode();
-
 			return;
 		}
 
 		BehaviorComp->SetWaitMode();
-		
 		return;
 	}
 
-	// Get Distance To
+	//Get Distance To
 	float Distance = EnemyPawn->GetDistanceTo(Player);
-
-	// Perceived Player
+	
+	//Perceived Player
 	UCStateComponent* OtherStateComp = CHelpers::GetComponent<UCStateComponent>(Player);
 	if (OtherStateComp && OtherStateComp->IsDeadMode())
 	{
 		BehaviorComp->SetWaitMode();
-
 		return;
 	}
 
@@ -81,15 +76,13 @@ void UCBTService_Melee::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	if (Distance < AIC->GetBehaviorRange())
 	{
 		BehaviorComp->SetActionMode();
-
 		return;
 	}
 
-	// In Sight Range
+	//In Sight Range
 	if (Distance < AIC->GetSightRadius())
 	{
 		BehaviorComp->SetApproachMode();
-
 		return;
 	}
 }

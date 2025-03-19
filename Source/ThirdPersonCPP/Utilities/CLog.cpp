@@ -1,8 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "CLog.h"
-#include "UnrealEngine.h"
 
 DEFINE_LOG_CATEGORY_STATIC(GameProject, Error, All)
 
@@ -41,7 +37,6 @@ void CLog::Log(float Value)
 	UE_LOG(GameProject, Error, TEXT("%f"), Value);
 }
 
-
 void CLog::Log(const FString& Value)
 {
 	UE_LOG(GameProject, Error, TEXT("%s"), *Value);
@@ -60,7 +55,6 @@ void CLog::Log(const FRotator& Value)
 void CLog::Log(const UObject* Object)
 {
 	FString Str;
-
 	if (Object)
 	{
 		Str.Append(Object->GetName());

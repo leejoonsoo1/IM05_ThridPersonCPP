@@ -2,14 +2,14 @@
 
 #include "CoreMinimal.h"
 
-#define CheckNull(p)					{ if (p == nullptr) return; }
-#define CheckNullResult(p, result)		{ if (p == nullptr) return result; }
+#define CheckNull(p) { if(p == nullptr) return; }
+#define CheckNullResult(p, result) { if(p == nullptr) return result; }
 
-#define CheckTrue(p)					{ if (p == true) return; }
-#define CheckTrueResult(p, result)		{ if (p == true) return result; }
+#define CheckTrue(p) { if (p == true) return; }
+#define CheckTrueResult(p, result) { if (p == true) return result; }
 
-#define CheckFalse(p)					{ if (p == false) return; }
-#define CheckFalseResult(p, result)		{ if (p == false) return result; }
+#define CheckFalse(p) { if (p == false) return; }
+#define CheckFalseResult(p, result) { if (p == false) return result; }
 
 class CHelpers
 {
@@ -31,35 +31,36 @@ public:
 
 		*OutAsset = Asset;
 	}
-	
+
 	template<typename T>
 	static void GetClass(TSubclassOf<T>* OutClass, FString InPath)
 	{
 		ConstructorHelpers::FClassFinder<T> AssetClass(*InPath);
-
 		ensureMsgf(AssetClass.Succeeded(), TEXT("Class not found"));
+		
 		*OutClass = AssetClass.Class;
+		
 	}
 
 	template<typename T>
 	static void CreateSceneComponent(AActor* InObject, T** OutComp, FName InName, USceneComponent* InParent = nullptr)
 	{
-		(*OutComp) = InObject->CreateDefaultSubobject<T>(InName);
-		
+		*OutComp = InObject->CreateDefaultSubobject<T>(InName);
+
 		if (InParent)
 		{
 			(*OutComp)->SetupAttachment(InParent);
+			return;
 		}
-		else
-		{
-			InObject->SetRootComponent(*OutComp);
-		}
+		
+		InObject->SetRootComponent(*OutComp);
+		
 	}
 
 	template<typename T>
 	static void CreateActorComponent(AActor* InObject, T** OutComp, FName InName)
 	{
-		(*OutComp) = InObject->CreateDefaultSubobject<T>(InName);
+		*OutComp = InObject->CreateDefaultSubobject<T>(InName);
 	}
 
 	template<typename T>

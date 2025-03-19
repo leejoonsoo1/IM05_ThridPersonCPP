@@ -2,15 +2,16 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Actions/CActionData.h"
+#include "Actions/CActionObject.h"
 #include "Actions/CEquipment.h"
 #include "Actions/CAttachment.h"
 #include "Actions/CDoAction.h"
-#include "Actions/CActionObject.h"
 
 UCActionComponent::UCActionComponent()
 {
 
 }
+
 
 void UCActionComponent::BeginPlay()
 {
@@ -29,12 +30,10 @@ void UCActionComponent::BeginPlay()
 
 void UCActionComponent::PrimaryAction()
 {
-	CLog::Log("UCActionComponent::PrimaryAction");
 	CheckTrue(IsUnarmedMode());
 
 	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction())
 	{
-		CLog::Log("DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction()");
 		DataObjects[(int32)Type]->GetDoAction()->PrimaryAction();
 	}
 }
@@ -42,12 +41,9 @@ void UCActionComponent::PrimaryAction()
 void UCActionComponent::Begin_SecondaryAction()
 {
 	CheckTrue(IsUnarmedMode());
-	CLog::Log("UCActionComponent::Begin_SecondaryAction");
 
 	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction())
 	{
-		CLog::Log("UCActionComponent::Begin_SecondaryAction");
-
 		DataObjects[(int32)Type]->GetDoAction()->Begin_SecondaryAction();
 	}
 }
@@ -55,6 +51,7 @@ void UCActionComponent::Begin_SecondaryAction()
 void UCActionComponent::End_SecondaryAction()
 {
 	CheckTrue(IsUnarmedMode());
+
 	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetDoAction())
 	{
 		DataObjects[(int32)Type]->GetDoAction()->End_SecondaryAction();
@@ -113,11 +110,11 @@ void UCActionComponent::Abort()
 	}
 }
 
-void UCActionComponent::SetUnarmedMode()
+void UCActionComponent::SetUnaremdMode()
 {
 	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetEquipment())
 	{
-		DataObjects[(int32)Type]->GetEquipment()->UnEquip();
+		DataObjects[(int32)Type]->GetEquipment()->Unequip();
 	}
 
 	if (DataObjects[(int32)EActionType::Unarmed] && DataObjects[(int32)EActionType::Unarmed]->GetEquipment())
@@ -162,19 +159,18 @@ void UCActionComponent::SetMode(EActionType InNewType)
 {
 	if (Type == InNewType)
 	{
-		SetUnarmedMode();
-
+		SetUnaremdMode();
 		return;
 	}
 	else if (!IsUnarmedMode())
 	{
 		if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetEquipment())
 		{
-			DataObjects[(int32)Type]->GetEquipment()->UnEquip(); // Prev Weapon UnEquip
+			DataObjects[(int32)Type]->GetEquipment()->Unequip();
 		}
 	}
-	
-	if (DataObjects[(int32)Type] && DataObjects[(int32)Type]->GetEquipment())
+
+	if (DataObjects[(int32)InNewType] && DataObjects[(int32)InNewType]->GetEquipment())
 	{
 		DataObjects[(int32)InNewType]->GetEquipment()->Equip();
 	}
@@ -186,7 +182,6 @@ void UCActionComponent::ChangeType(EActionType InNewType)
 {
 	EActionType PrevType = Type;
 	Type = InNewType;
-
-
+ 
 	OnActionTypeChanged.Broadcast(PrevType, Type);
 }

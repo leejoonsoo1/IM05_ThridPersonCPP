@@ -1,6 +1,7 @@
 #include "CAnimInstance.h"
 #include "Global.h"
 
+
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
@@ -25,7 +26,7 @@ void UCAnimInstance::NativeBeginPlay()
 	UCActionComponent* ActionComp = CHelpers::GetComponent<UCActionComponent>(TryGetPawnOwner());
 	CheckNull(ActionComp);
 
-	ActionComp->OnActionTypeChanged.AddDynamic(this, &UCAnimInstance::OnActionTypeChanged);
+	ActionComp-> OnActionTypeChanged.AddDynamic(this, &UCAnimInstance::OnActionTypeChanged);
 }
 
 void UCAnimInstance::OnActionTypeChanged(EActionType InPrevType, EActionType InNewType)

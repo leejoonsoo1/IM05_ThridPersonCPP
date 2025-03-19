@@ -17,13 +17,13 @@ public:
 	virtual void DrawHUD() override;
 
 public:
-	void EnableAimTextTure();
-	void DisableAimTextTure();
+	void EnableAimTexture();
+	void DisableAimTexture();
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Aim")
-	UTexture2D* AimTexture;
-
+	UTexture2D* AimTextue;
+	
 private:
 	bool bDrawAimTexture;
 };

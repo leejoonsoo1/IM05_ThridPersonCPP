@@ -24,7 +24,7 @@ bool UCBehaviorComponent::IsApproachMode()
 
 bool UCBehaviorComponent::IsActionMode()
 {
-	return 	GetType() == EBehaviorType::Action;
+	return GetType() == EBehaviorType::Action;
 }
 
 bool UCBehaviorComponent::IsPatrolMode()
@@ -72,11 +72,9 @@ void UCBehaviorComponent::SetRunAwayMode()
 	ChangeType(EBehaviorType::RunAway);
 }
 
-// BlackboardComp exist in AIController
 EBehaviorType UCBehaviorComponent::GetType()
 {
-	// Read Behavior Key Value
-	return (EBehaviorType)(BlackboardComp->GetValueAsEnum(BehaviorKeyName));
+	return (EBehaviorType)BlackboardComp->GetValueAsEnum(BehaviorKeyName);
 }
 
 void UCBehaviorComponent::ChangeType(EBehaviorType InNewType)
@@ -85,11 +83,9 @@ void UCBehaviorComponent::ChangeType(EBehaviorType InNewType)
 	BlackboardComp->SetValueAsEnum(BehaviorKeyName, (uint8)InNewType);
 }
 
-ACPlayer* UCBehaviorComponent::GetTargetPlayerValue()
+ACPlayer* UCBehaviorComponent::GetPlayerValue()
 {
-	
-
-	return Cast<ACPlayer>(BlackboardComp->GetValueAsObject(PlayerKeyName));
+	return Cast<ACPlayer>(BlackboardComp->GetValueAsObject(PlayKeyName));
 }
 
 FVector UCBehaviorComponent::GetLocationValue()

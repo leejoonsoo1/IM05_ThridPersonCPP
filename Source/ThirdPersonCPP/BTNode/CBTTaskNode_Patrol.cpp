@@ -3,7 +3,6 @@
 #include "AIController.h"
 #include "Components/CPatrolComponent.h"
 
-
 UCBTTaskNode_Patrol::UCBTTaskNode_Patrol()
 {
 	NodeName = "Patrol";
@@ -50,14 +49,12 @@ void UCBTTaskNode_Patrol::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	if (Result == EPathFollowingRequestResult::Failed)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-
 		return;
 	}
 
 	if (Result == EPathFollowingRequestResult::AlreadyAtGoal)
 	{
 		PatrolComp->UpdateNextIndex();
-
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }

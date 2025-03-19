@@ -5,32 +5,35 @@
 
 ACHUD::ACHUD()
 {
-	CHelpers::GetAsset(&AimTexture, "/Game/Materials/T_Crosshair");
+	CHelpers::GetAsset(&AimTextue, "/Game/Materials/T_Crosshair");
 }
 
 void ACHUD::DrawHUD()
 {
 	Super::DrawHUD();
-	
-	CheckFalse(bDrawAimTexture);
-	CheckNull(AimTexture);
 
-	FVector2D HalfScreenSize	= FVector2D(Canvas->ClipX, Canvas->ClipY) * 0.5f;
-	FVector2D HalfImageSize		= FVector2D(AimTexture->GetSurfaceWidth(), AimTexture->GetSurfaceHeight()) * 0.5f;
+	CheckFalse(bDrawAimTexture);
+
+	CheckNull(AimTextue);
+
+	FVector2D HalfScreenSize = FVector2D(Canvas->ClipX, Canvas->ClipY) * 0.5f;
+	FVector2D HalfImageSize = FVector2D(AimTextue->GetSurfaceWidth(), AimTextue->GetSurfaceHeight()) * 0.5f;
 
 	FVector2D Position = HalfScreenSize - HalfImageSize;
 
-	FCanvasTileItem Item(Position, AimTexture->Resource, FLinearColor::White);
+	FCanvasTileItem Item(Position, AimTextue->Resource, FLinearColor::White);
 	Item.BlendMode = SE_BLEND_Translucent;
+
 	Canvas->DrawItem(Item);
+
 }
 
-void ACHUD::EnableAimTextTure()
+void ACHUD::EnableAimTexture()
 {
 	bDrawAimTexture = true;
 }
 
-void ACHUD::DisableAimTextTure()
+void ACHUD::DisableAimTexture()
 {
 	bDrawAimTexture = false;
 }

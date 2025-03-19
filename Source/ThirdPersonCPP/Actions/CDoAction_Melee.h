@@ -1,15 +1,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "CDoAction.h"
+#include "Actions/CDoAction.h"
 #include "CDoAction_Melee.generated.h"
 
 UCLASS()
 class THIRDPERSONCPP_API ACDoAction_Melee : public ACDoAction
 {
 	GENERATED_BODY()
-	
+
 public:
 	virtual void PrimaryAction() override;
 	virtual void Begin_PrimaryAction() override;
@@ -17,7 +16,7 @@ public:
 
 	virtual void OnAttachmentBeginOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter) override;
 	virtual void OnAttachmentEndOverlap(ACharacter* InAttacker, AActor* InCauser, ACharacter* InOtherCharacter) override;
-
+	
 	void EnableCombo();
 	void DisableCombo();
 
@@ -25,17 +24,13 @@ public:
 
 private:
 	UFUNCTION()
-	void RestoreGlobalTimeDelation();
-
-	void FlipFlop();
+	void RestoreGlobalTimeDilation();
 
 private:
 	int32 ComboCount;
 	
 	bool bCanCombo;
 	bool bSuccessCombo;
-
-	bool bCanAttack = true;
 
 	TArray<ACharacter*> HittedCharacters;
 };

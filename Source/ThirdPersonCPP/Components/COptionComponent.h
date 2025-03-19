@@ -13,6 +13,7 @@ class THIRDPERSONCPP_API UCOptionComponent : public UActorComponent
 public:	
 	UCOptionComponent();
 
+public:
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE float GetMouseXSpeed() const { return MouseXSpeed; }
 
@@ -37,15 +38,14 @@ public:
 protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Mouse")
 	float MouseXSpeed;
-	
+
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Mouse")
 	float MouseYSpeed;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Mouse")
 	float ZoomSpeed;
-
-	// 
+		
+	//x is min range, y is max range
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Mouse")
 	FVector2D ZoomRange;
-
 };
